@@ -1,0 +1,10 @@
+# Exclure le dossier .vscode
+.vscode
+
+# Autres exclusions courantes (facultatives)
+# Fichiers de compilation
+*.out
+
+*.txt
+
+.md
