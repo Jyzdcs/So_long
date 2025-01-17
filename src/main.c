@@ -6,128 +6,131 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/16 19:26:17 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:56:13 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	place_texture(t_game game, int y, int x, int color)
 {
-	char	*dst;
+	t_texture	texture;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	texture = fill_square(game.mlx, 40, 40, color);
+    mlx_put_image_to_window(game.mlx, game.mlx_win, texture.img, x, y);
 }
 
-void	write_front_line(t_data img, int width)
-{
-	int	x;
-
-	x = 0;
-	while (x < width)
-		my_mlx_pixel_put(&img, x++, 0, 0x00FF0000);
-}
-
-void	write_back_line(t_data img, int width, int y)
-{
-	int	x;
-
-	x = width;
-	while (x > 0)
-		my_mlx_pixel_put(&img, x--, y, 0x00FF0000);
-}
-
-void	write_vertical_line(t_data img, int height, int x)
+int		calcul_dim(char **map)
 {
 	int	y;
 
 	y = 0;
-	while (y < height)
-		my_mlx_pixel_put(&img, x, y++, 0x00FF0000);
-}
-
-void	make_square(t_data img, int width, int height)
-{
-	write_front_line(img, width);
-	write_back_line(img, width, height);
-	write_vertical_line(img, height, 0);
-	write_vertical_line(img, height, width);
-}
-
-t_data	fill_square(void *mlx, int width, int height, int color)
-{
-	t_data	fill;
-	int		y;
-	int		x;
-
-	fill.img = mlx_new_image(mlx, width, height);
-	fill.addr = mlx_get_data_addr(fill.img, &fill.bits_per_pixel, &fill.line_length,
-								&fill.endian);
-	y = 0;
-	while (y < height)
-	{
-		x = 0;
-		while (x < width)
-			my_mlx_pixel_put(&fill, x++, y, color);
+	while (map[y])
 		y++;
-	}
-	return (fill);
+	return (y);
 }
 
-int key_hook(int keycode, t_player *player) {
-	if (keycode == 13)
-	{
-		player->old_x = player->x;
-		player->old_y = player->y;
-		player->y -= 30;
-	}
-	else if (keycode == 1)
-	{
-		player->old_x = player->x;
-		player->old_y = player->y;
-		player->y += 30;
-	}
-	else if (keycode == 0)
-	{
-		player->old_y = player->y;
-		player->old_x = player->x;
-		player->x -= 30;
-	}
-	else if (keycode == 2)
-	{
-		player->old_y = player->y;
-		player->old_x = player->x;
-		player->x += 30;
-	}
-	printf("UPDATE\n");
-	return (0);
-}
-
-int update_game(t_game *game)
-{
-	t_data	eraser;
-
-	eraser = fill_square(game->mlx, 30, 30, 0x00000000);
-    mlx_put_image_to_window(game->mlx, game->mlx_win, eraser.img, game->player.old_x, game->player.old_y);
-    mlx_put_image_to_window(game->mlx, game->mlx_win, game->player.img.img, game->player.x, game->player.y);
-    return (0);
-}
-
-int	main(void)
+t_game	init_map(char **map)
 {
 	t_game	game;
+	int		i;
+	int		j;
+	int		height;
 
+	height = calcul_dim(map);
+	if (height == 0)
+		return (game);
 
 	game.mlx = mlx_init();
-	game.mlx_win = mlx_new_window(game.mlx, 620, 480, "Hello world!");
-	game.player.x = 50;
-	game.player.y = 50;
-	game.player.old_x = 50;
-	game.player.old_y = 50;
-	game.player.img = fill_square(game.mlx, 30, 30, 0x00FF0000);
-	mlx_put_image_to_window(game.mlx, game.mlx_win, game.player.img.img, game.player.x, game.player.y);
-	mlx_hook(game.mlx_win, 2, 1L<<0, key_hook, &game.player);
-	mlx_loop_hook(game.mlx, update_game, &game);
+	game.mlx_win = mlx_new_window(game.mlx, ft_strlen(map[0]) * 40, 8 * 40, "Hello world!");
+	
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == '1')
+				place_texture(game, i * 40, j * 40, 0x00FFFFFF); //blanc
+			else if (map[i][j] == 'E')
+				place_texture(game, i * 40, j * 40, 0x00990000); //
+			else if (map[i][j] == '0')
+				place_texture(game, i * 40, j * 40, 0x0000FF33);
+			else if (map[i][j] == 'C')
+				place_texture(game, i * 40, j * 40, 0x00CCCC00);
+			j++;
+		}
+		i++;
+	}
+	return (game);
+}
+
+int	main(int ac, char **av)
+{
+	t_game	game;
+	char	**map;
+	int		i;
+	int		fd;
+	int		map_height;
+
+	if (ac != 2)
+		return (printf("Error: wrong number of arguments\n"));
+	
+	fd = open(av[1], O_RDONLY);
+	if (fd < 0)
+		return (printf("ERROR: Cannot open file\n"));
+
+	// Compter d'abord le nombre de lignes
+	map_height = 0;
+	char *line;
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		map_height++;
+		free(line);
+	}
+	close(fd);
+
+	// Allouer la mémoire pour map
+	map = (char **)malloc(sizeof(char *) * (map_height + 1));
+	if (!map)
+		return (printf("ERROR: Memory allocation failed\n"));
+
+	// Relire le fichier
+	fd = open(av[1], O_RDONLY);
+	if (fd < 0)
+	{
+		free(map);
+		return (printf("ERROR: Cannot open file\n"));
+	}
+
+	// Lire et stocker chaque ligne
+	i = 0;
+	while (i < map_height)
+	{
+		map[i] = get_next_line(fd);
+		if (!map[i])
+		{
+			// Gérer l'erreur de lecture
+			while (i > 0)
+				free(map[--i]);
+			free(map);
+			close(fd);
+			return (printf("ERROR: Reading file failed\n"));
+		}
+		i++;
+	}
+	map[i] = NULL;  // Terminer le tableau par NULL
+	close(fd);
+
+	// Initialiser la map
+	game = init_map(map);
+	mlx_hook(game.mlx_win, 2, 1L<<0, key_hook, &game);
 	mlx_loop(game.mlx);
+	// Libérer la mémoire à la fin
+	i = 0;
+	while (map[i])
+		free(map[i++]);
+	free(map);
+
+	return (0);
 }

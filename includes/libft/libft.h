@@ -16,6 +16,8 @@
 # include <stdint.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <fcntl.h>
+# include <stddef.h>
 
 typedef struct s_list
 {
@@ -23,6 +25,19 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 500
+# endif
+
+char	*ft_strchr(const char *s, int c);
+void	ft_bzero(void *s, size_t n);
+void	*ft_calloc(size_t elementCount, size_t elementSize);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*read_file(int fd, char *res);
+char	*get_next_line(int fd);
+char	*ft_line(char *buffer);
+char	*ft_next(char *buffer);
+char	*ft_free(char *buffer, char *buf);
 void	ft_bzero(void *s, size_t n);
 void	*ft_memchr(const void *s, int c, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
