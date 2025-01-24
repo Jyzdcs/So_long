@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/20 19:51:48 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:48:52 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ int close_window(t_game *game)
 	int	i;
 	
 	mlx_destroy_window(game->mlx, game->mlx_win);
-	i = 0;
-	while (game->map[i])
-		free(game->map[i++]);
-	free(game->map);
+	free_all_ptr(game->map);
 	exit(0); // Quitte le programme
     return 0;
 }
@@ -93,6 +90,29 @@ void	init_map(t_game *game)
 	return ;
 }
 
+int	get_extension(char *str)
+{
+	int		i;
+	char	**path;
+	char	**file_name;
+
+	i = 0;
+	path = ft_split(str, '/');
+	while (path[i + 1])
+		i++;
+	file_name = ft_split(path[i], '.');
+	i = 0;
+	while (file_name[i + 1])
+		i++;
+	if (ft_strcmp(file_name[i], "ber") != 0)
+	{
+		free_all_ptr(path);
+		free_all_ptr(file_name);
+		return (1);
+	}
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_game	game;
@@ -102,7 +122,11 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 		return (printf("Error: wrong number of arguments\n"));
-	
+	if (get_extension(av[1]))
+	{
+		printf("ERROR OF EXTENSION\n");
+		return (0);
+	}
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
 		return (printf("ERROR: Cannot open file\n"));
@@ -148,7 +172,16 @@ int	main(int ac, char **av)
 	}
 	game.map[i] = NULL;  // Terminer le tableau par NULL
 	close(fd);
-
+	if (!is_valid(game.map))
+	{
+		printf("ERROR\n");
+		i = 0;
+		while (game.map[i])
+			free(game.map[i++]);
+		free(game.map);
+		exit(0); // Quitte le programme
+		return (1);
+	}
 	// Initialiser la map
 	game.mlx = mlx_init();
 	init_map(&game);

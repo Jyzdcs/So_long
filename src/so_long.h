@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/20 19:55:41 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:11:55 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ typedef struct s_game {
     t_player player;
 } t_game;
 
-void	my_mlx_pixel_put(t_texture *data, int x, int y, int color);
+void		my_mlx_pixel_put(t_texture *data, int x, int y, int color);
 t_texture	fill_square(void *mlx, int width, int height, int color);
-int key_hook(int keycode, t_game *game);
-int close_window(t_game *game);
-void	place_texture(t_game *game, int y, int x, char *path);
-
+int 		key_hook(int keycode, t_game *game);
+int 		close_window(t_game *game);
+void		place_texture(t_game *game, int y, int x, char *path);
+int			is_valid(char **map);
 #endif
