@@ -6,18 +6,31 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/17 18:56:13 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:51:48 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	place_texture(t_game game, int y, int x, int color)
+int close_window(t_game *game)
+{
+	int	i;
+	
+	mlx_destroy_window(game->mlx, game->mlx_win);
+	i = 0;
+	while (game->map[i])
+		free(game->map[i++]);
+	free(game->map);
+	exit(0); // Quitte le programme
+    return 0;
+}
+
+void	place_texture(t_game *game, int y, int x, char *path)
 {
 	t_texture	texture;
 
-	texture = fill_square(game.mlx, 40, 40, color);
-    mlx_put_image_to_window(game.mlx, game.mlx_win, texture.img, x, y);
+	texture.img = mlx_xpm_file_to_image(game->mlx, path, &(game->player.width), &(game->player.height));
+    mlx_put_image_to_window(game->mlx, game->mlx_win, texture.img, x, y);
 }
 
 int		calcul_dim(char **map)
@@ -30,45 +43,59 @@ int		calcul_dim(char **map)
 	return (y);
 }
 
-t_game	init_map(char **map)
+void	init_player(t_game *game, int y, int x, int width, int height)
 {
-	t_game	game;
-	int		i;
-	int		j;
+	game->player.x = x;
+	game->player.y = y;
+	game->player.width = 32;
+	game->player.height = 32;
+	game->player.items = 0;
+	game->player.img.img = mlx_xpm_file_to_image(game->mlx, "../textures/Pac-Man/pac_closed.xpm", &(game->player.width), &(game->player.height));
+	if (!game->player.img.img)
+		printf("ERROR OF FILE\n");
+	game->player.hitbox.back_x = x - 1;
+	game->player.hitbox.front_x = x + 1;
+	game->player.hitbox.top_y = y - 1;
+	game->player.hitbox.bot_y = y + 1;
+    mlx_put_image_to_window(game->mlx, game->mlx_win, game->player.img.img, x * 32, y * 32);
+}
+
+void	init_map(t_game *game)
+{
+	int		y;
+	int		x;
 	int		height;
 
-	height = calcul_dim(map);
-	if (height == 0)
-		return (game);
+	game->mlx_win = mlx_new_window(game->mlx, ft_strlen(game->map[0]) * 32, 15 * 32, "Hello world!");
+	game->total_items = 0;
 
-	game.mlx = mlx_init();
-	game.mlx_win = mlx_new_window(game.mlx, ft_strlen(map[0]) * 40, 8 * 40, "Hello world!");
-	
-	i = 0;
-	while (map[i])
+	y = 0;
+	while (game->map[y])
 	{
-		j = 0;
-		while (map[i][j])
+		x = 0;
+		while (game->map[y][x])
 		{
-			if (map[i][j] == '1')
-				place_texture(game, i * 40, j * 40, 0x00FFFFFF); //blanc
-			else if (map[i][j] == 'E')
-				place_texture(game, i * 40, j * 40, 0x00990000); //
-			else if (map[i][j] == '0')
-				place_texture(game, i * 40, j * 40, 0x0000FF33);
-			else if (map[i][j] == 'C')
-				place_texture(game, i * 40, j * 40, 0x00CCCC00);
-			j++;
+			if (game->map[y][x] == '1')
+				place_texture(game, y * 32, x * 32, "../textures/Other/Walls/wall.xpm"); //blanc
+			else if (game->map[y][x] == 'P')
+				init_player(game, y, x, 32, 32); // Jaune
+			else if (game->map[y][x] == 'E')
+				place_texture(game, y * 32, x * 32, "../textures/exit.xpm"); // Violet
+			else if (game->map[y][x] == 'C')
+			{
+				place_texture(game, y * 32, x * 32, "../textures/Other/Pacdots/pacdot_food.xpm"); // Saumon
+				game->total_items++;
+			}
+			x++;
 		}
-		i++;
+		y++;
 	}
-	return (game);
+	return ;
 }
 
 int	main(int ac, char **av)
 {
 	t_game	game;
-	char	**map;
 	int		i;
 	int		fd;
 	int		map_height;
@@ -91,15 +118,15 @@ int	main(int ac, char **av)
 	close(fd);
 
 	// Allouer la mémoire pour map
-	map = (char **)malloc(sizeof(char *) * (map_height + 1));
-	if (!map)
+	game.map = (char **)malloc(sizeof(char *) * (map_height + 1));
+	if (!game.map)
 		return (printf("ERROR: Memory allocation failed\n"));
 
 	// Relire le fichier
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
 	{
-		free(map);
+		free(game.map);
 		return (printf("ERROR: Cannot open file\n"));
 	}
 
@@ -107,30 +134,26 @@ int	main(int ac, char **av)
 	i = 0;
 	while (i < map_height)
 	{
-		map[i] = get_next_line(fd);
-		if (!map[i])
+		game.map[i] = get_next_line(fd);
+		if (!game.map[i])
 		{
 			// Gérer l'erreur de lecture
 			while (i > 0)
-				free(map[--i]);
-			free(map);
+				free(game.map[--i]);
+			free(game.map);
 			close(fd);
 			return (printf("ERROR: Reading file failed\n"));
 		}
 		i++;
 	}
-	map[i] = NULL;  // Terminer le tableau par NULL
+	game.map[i] = NULL;  // Terminer le tableau par NULL
 	close(fd);
 
 	// Initialiser la map
-	game = init_map(map);
+	game.mlx = mlx_init();
+	init_map(&game);
 	mlx_hook(game.mlx_win, 2, 1L<<0, key_hook, &game);
 	mlx_loop(game.mlx);
 	// Libérer la mémoire à la fin
-	i = 0;
-	while (map[i])
-		free(map[i++]);
-	free(map);
-
 	return (0);
 }
