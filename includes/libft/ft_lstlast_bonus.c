@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-t_list	*ft_lstlast(t_list *lst)
+t_items	*ft_lstlast(t_items *lst)
 {
 	if (lst == NULL || lst->next == NULL)
 		return (lst);
@@ -25,9 +25,9 @@ t_list	*ft_lstlast(t_list *lst)
 
 int	main(int argc, char *argv[])
 {
-	t_list *node1 = ft_lstnew(argv[1]);
-	t_list *node2 = ft_lstnew(argv[2]);
-	t_list *node3 = ft_lstnew(argv[3]);
+	t_items *node1 = ft_lstnew(argv[1]);
+	t_items *node2 = ft_lstnew(argv[2]);
+	t_items *node3 = ft_lstnew(argv[3]);
 	t_list *node4 = ft_lstnew(argv[4]);
 	t_list	*tmp;
 	ft_lstadd_front(&node1, node2);

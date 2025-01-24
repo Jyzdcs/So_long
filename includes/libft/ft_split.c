@@ -49,7 +49,7 @@ char	*alloc_word_memory(char const *s, char sep)
 	return (tab);
 }
 
-char	**free_all_ptr(char **tab)
+char	**free_all_ptr(void **tab)
 {
 	int	i;
 
@@ -80,7 +80,7 @@ char	**ft_split(char const *s, char c)
 		{
 			tab[k] = alloc_word_memory(&s[i], c);
 			if (tab[k++] == NULL)
-				return (free_all_ptr(tab));
+				return (free_all_ptr((void **)tab));
 			while (s[i] != c && s[i])
 				i++;
 		}

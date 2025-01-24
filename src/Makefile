@@ -15,7 +15,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(MAKE) -C ../minilibx_opengl_20191021
 	$(MAKE) -C ../includes/libft
-	$(CC) $(OBJS) $(LIBFT) $(MLX_LIB) $(MLX_FLAGS) $ -o $(NAME)
+	$(CC) $(OBJS) $(LIBFT) $(MLX_LIB) $(MLX_FLAGS) $ -o $(NAME) -g
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
