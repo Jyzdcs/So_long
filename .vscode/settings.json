@@ -3,6 +3,8 @@
 		"mlx.h": "c",
 		"libft.h": "c",
 		"so_long.h": "c",
-		"fcntl.h": "c"
+		"fcntl.h": "c",
+		"unistd.h": "c",
+		"stdio.h": "c"
 	}
 }

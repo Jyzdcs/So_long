@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:50:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 14:40:09 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:31:49 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static int move_player(t_game *game, int direction)
 	handle_collectible_and_exit(game);
 	update_hitbox(game, direction);
 	movement_select(game, direction);
-	printf("pos %d|%d\n", game->player.y, game->player.x);
+	// printf("pos %d|%d\n", game->player.y, game->player.x);
 	return (1);
 }
 

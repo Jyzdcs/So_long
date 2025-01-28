@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 14:18:22 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:19:22 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	init_ennemie(t_game *game, int y, int x)
 		return ;
 	size = 32;
 	ghost->x = x;
+	ghost->id = game->index;
 	ghost->y = y;
 	ghost->direction = 0;
 	ghost->move = 1;

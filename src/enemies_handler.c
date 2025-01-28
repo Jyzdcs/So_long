@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:30:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 16:34:22 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:48:20 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,30 @@ static int	check_collision(t_game *game, int i)
 	return (0);
 }
 
-static void move_horizontal(t_game *game, int i)
+// static	void	change_direction(t_game *game, int i, int move, int sens)
+// {
+// 	if (move == LEFT)
+// 	{
+// 		if (game->map[game->ennemies[i]->y - 1][game->ennemies[i]->x] != '1')
+
+// 	}
+// }
+
+static void move_horizontal(t_game *game, int i, int new_call)
 {
-	game->ennemies[i]->direction = 1;
 	clear_enemy(game, game->ennemies[i]->x, game->ennemies[i]->y);
 	if (game->map[game->ennemies[i]->y][game->ennemies[i]->x] == 'C')
 		place_texture(game, game->ennemies[i]->y, game->ennemies[i]->x, "../textures/Other/Pacdots/pacdot_food.xpm");
     if (game->map[game->ennemies[i]->y][game->ennemies[i]->x + game->ennemies[i]->move] == '1')
+	{
         game->ennemies[i]->move *= -1; // Inverse la direction
-    game->ennemies[i]->x += game->ennemies[i]->move; // Déplace l'ennemi
-	// game->map[game->ennemies[i]->y][game->ennemies[i]->x] = 'G';
+		game->ennemies[i]->direction = 1;
+	}
+	game->ennemies[i]->x += game->ennemies[i]->move; // Déplace l'ennemi
 }
 
-static void move_vertical(t_game *game, int i)
+static void move_vertical(t_game *game, int i, int new_call)
 {
-	game->ennemies[i]->direction = 2;
 	clear_enemy(game, game->ennemies[i]->x, game->ennemies[i]->y);
 	if (game->map[game->ennemies[i]->y][game->ennemies[i]->x] == 'C')
 		place_texture(game, game->ennemies[i]->y, game->ennemies[i]->x, "../textures/Other/Pacdots/pacdot_food.xpm");
@@ -56,37 +65,46 @@ static void move_vertical(t_game *game, int i)
     game->ennemies[i]->y += game->ennemies[i]->move; // Déplace l'ennemi
 }
 
-int	calcul_longest(char **map, t_ennemie *enemie)
+void	handle_direction(t_game *game, int i)
 {
-	int	len_x;
-	int	len_y;
-	int	i;
-	int	j;
-
-	i = enemie->x;
-	j = enemie->x;
-	while (map[enemie->y][i] != '1')
-		i++;
-	while (map[enemie->y][j] != '1')
-		j--;
-	len_x = i + enemie->x - j;
-	i = enemie->y;
-	j = enemie->y;
-	while (map[i][enemie->x] != '1')
-		i++;
-	while (map[j][enemie->x] != '1')
-		j--;
-	len_y = i + enemie->x - j;
-	return (len_x >= len_y);
+	clear_enemy(game, game->ennemies[i]->x, game->ennemies[i]->y);
+	if (game->map[game->ennemies[i]->y - 1][game->ennemies[i]->x] != '1')
+	{
+		game->ennemies[i]->y--;
+		game->ennemies[i]->move = UP;
+	}
+	else if (game->map[game->ennemies[i]->y][game->ennemies[i]->x - 1] != '1')
+	{
+		game->ennemies[i]->x--;
+		game->ennemies[i]->move = LEFT;
+	}
+	else if (game->map[game->ennemies[i]->y + 1][game->ennemies[i]->x] != '1')
+	{
+		game->ennemies[i]->y++;
+		game->ennemies[i]->move = DOWN;
+	}
+	else if (game->map[game->ennemies[i]->y][game->ennemies[i]->x + 1] != '1')
+	{
+		game->ennemies[i]->y++;
+		game->ennemies[i]->move = RIGHT;
+	}
 }
 
-// void	semi_sprites(t_game *game, int i)
-// {
-// 	if (game->ennemies[i]->direction)
-// 	{
-// 		if ()
-// 	}
-// }
+int	hit_wall(t_game *game, int i)
+{
+	if (game->map[game->ennemies[i]->y - 1][game->ennemies[i]->x] == '1'
+		&& game->ennemies[i]->move == UP)
+		return (TRUE);
+	if (game->map[game->ennemies[i]->y][game->ennemies[i]->x - 1] == '1'
+		&& game->ennemies[i]->move == LEFT)
+		return (TRUE);
+	if (game->map[game->ennemies[i]->y + 1][game->ennemies[i]->x] == '1'
+		&& game->ennemies[i]->move == DOWN)
+		return (TRUE);
+	if (game->map[game->ennemies[i]->y][game->ennemies[i]->x + 1] == '1'
+		&& game->ennemies[i]->move == DOWN)
+		return (TRUE);
+}
 
 int	update_enemies(t_game *game)
 {
@@ -94,15 +112,15 @@ int	update_enemies(t_game *game)
 	int			i;
 
 	update_counter++;
-	if (update_counter % 900 != 0)
+	if (update_counter % 2000 != 0)
 		return (1);
 	i = 0;
 	while (i < game->index)
 	{
-		if (calcul_longest(game->map, game->ennemies[i]))
-			move_horizontal(game, i);
-		else
-			move_vertical(game, i);
+		if (!game->ennemies[i]->direction)
+			handle_direction(game, i);
+		if (hit_wall(game, i))
+			game->ennemies[i]->direction = 1;
 		if (check_collision(game, i))
 			return (0);
 		// semi_sprites(game, i);
@@ -113,4 +131,31 @@ int	update_enemies(t_game *game)
 		i++;
 	}
 	return (1);
-} 
+}
+
+
+
+OBJECTIF PROCHAINE SEANCE :
+
+Je suis parti sur une base de faire changer de direction a mes perso lorsquil touche un mur.
+
+La theorie est la suivante :
+- ma struct enemie contine direction
+- quand direction passe a 1, on fait en sorte qu'a la prochaine intesection, on puisse changer directement
+- apres ca on remet direction a 0 et on recommecne
+
+2h
+
+Deuxieme objectif :
+
+Faire en sorte que selon le changement de direction, mes fantomes changes d'img, cela donnera un meilleur rendu
+
+Cela devrait etre possible grace a la clé move qui contient la derniere action effectuer par le fantome
+
+1h30
+
+Tester tout les potentiel bug
+
+Troisieme objectif :
+
+Donner la possibiliter de fermer et kill le program quand on ferme a laide de la croix.

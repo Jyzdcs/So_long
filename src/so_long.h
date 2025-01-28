@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 16:45:39 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:55:43 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct	s_texture {
 
 typedef struct	s_ennemie
 {
+	int	id;
 	int	y;
 	int	x;
 	int	move;
@@ -99,6 +100,7 @@ int 		key_hook(int keycode, t_game *game);
 int 		close_window(t_game *game);
 void		place_texture(t_game *game, int y, int x, char *path);
 int			is_valid(char **map);
-int	update_enemies(t_game *game);
+int			update_enemies(t_game *game);
+static void	move_vertical(t_game *game, int i, int new_call);
 
 #endif
