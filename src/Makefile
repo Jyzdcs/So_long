@@ -6,7 +6,7 @@ MLX_LIB		= ../minilibx_opengl_20191021/libmlx.a
 LIBFT		= ../includes/libft/libft.a
 GNL		= ../includes/libft/get_next_line.a
 
-SRCS		= main.c movements_handler.c filler.c parsing.c
+SRCS		= main.c movements_handler.c filler.c parsing.c enemies_handler.c
 
 OBJS		= $(SRCS:.c=.o)
 

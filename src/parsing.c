@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:01:44 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/24 16:03:35 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/26 01:04:27 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ int	is_valid(char **map)
 				player++;
 			}
 			if (map[i][j] != 'P' && map[i][j] != 'C' && map[i][j] != 'E'
-				&& map[i][j] != '0' && map[i][j] != '1')
+				&& map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'G')
 				return (1);
 			j++;
 		}

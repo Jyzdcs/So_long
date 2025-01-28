@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/24 11:11:29 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:18:22 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ int close_window(t_game *game)
 	int	i;
 	
 	mlx_destroy_window(game->mlx, game->mlx_win);
-	free_all_ptr(game->map);
-	exit(0); // Quitte le programme
+	free_all_ptr((void **)game->map);
+	free_all_ptr((void **)game->ennemies);
+	// free((void **)game->ennemies);
+	exit(0);
     return 0;
 }
 
@@ -27,7 +29,7 @@ void	place_texture(t_game *game, int y, int x, char *path)
 	t_texture	texture;
 
 	texture.img = mlx_xpm_file_to_image(game->mlx, path, &(game->player.width), &(game->player.height));
-    mlx_put_image_to_window(game->mlx, game->mlx_win, texture.img, x, y);
+    mlx_put_image_to_window(game->mlx, game->mlx_win, texture.img, x * 32, y * 32);
 }
 
 int		calcul_dim(char **map)
@@ -57,14 +59,34 @@ void	init_player(t_game *game, int y, int x, int width, int height)
     mlx_put_image_to_window(game->mlx, game->mlx_win, game->player.img.img, x * 32, y * 32);
 }
 
+void	init_ennemie(t_game *game, int y, int x)
+{
+	t_ennemie	*ghost;
+	int			size;
+
+	ghost = malloc(sizeof(t_ennemie));
+	if (!ghost)
+		return ;
+	size = 32;
+	ghost->x = x;
+	ghost->y = y;
+	ghost->direction = 0;
+	ghost->move = 1;
+	game->ennemies[game->index] = ghost;
+	game->ennemies[game->index]->img = mlx_xpm_file_to_image(game->mlx, "../textures/Ghosts/R/ghost_left1.xpm", &size, &size);
+	mlx_put_image_to_window(game->mlx, game->mlx_win, game->ennemies[game->index]->img, x * 32, y * 32);
+	game->index++;
+}
+
 void	init_map(t_game *game)
 {
 	int		y;
 	int		x;
 	int		height;
 
-	game->mlx_win = mlx_new_window(game->mlx, ft_strlen(game->map[0]) * 32, 15 * 32, "Hello world!");
+	game->mlx_win = mlx_new_window(game->mlx, ft_strlen(game->map[0]) * 32, 15 * 32, "PacMan v2");
 	game->total_items = 0;
+	game->index = 0;
 
 	y = 0;
 	while (game->map[y])
@@ -73,14 +95,16 @@ void	init_map(t_game *game)
 		while (game->map[y][x])
 		{
 			if (game->map[y][x] == '1')
-				place_texture(game, y * 32, x * 32, "../textures/Other/Walls/wall.xpm"); //blanc
+				place_texture(game, y, x, "../textures/Other/Walls/wall.xpm"); //blanc
 			else if (game->map[y][x] == 'P')
 				init_player(game, y, x, 32, 32); // Jaune
+			else if (game->map[y][x] == 'G')
+				init_ennemie(game, y, x);
 			else if (game->map[y][x] == 'E')
-				place_texture(game, y * 32, x * 32, "../textures/exit.xpm"); // Violet
+				place_texture(game, y, x, "../textures/exit.xpm"); // Violet
 			else if (game->map[y][x] == 'C')
 			{
-				place_texture(game, y * 32, x * 32, "../textures/Other/Pacdots/pacdot_food.xpm"); // Saumon
+				place_texture(game, y, x, "../textures/Other/Pacdots/pacdot_food.xpm"); // Saumon
 				game->total_items++;
 			}
 			x++;
@@ -106,11 +130,44 @@ int	get_extension(char *str)
 		i++;
 	if (ft_strcmp(file_name[i], "ber") != 0)
 	{
-		free_all_ptr(path);
-		free_all_ptr(file_name);
+		free_all_ptr((void **)path);
+		free_all_ptr((void **)file_name);
 		return (1);
 	}
 	return (0);
+}
+
+int	nbr_of_ghost(char **map)
+{
+	int	i;
+	int	j;
+	int	counter;
+
+	i = 0;
+	counter = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'G')
+				counter++;
+			j++;
+		}
+		i++;
+	}
+	return (counter);
+}
+
+int	init_game(t_game *game)
+{
+	game->map_width = 0;
+	game->map_height = 0;
+	while (game->map[game->map_height][game->map_width])
+		game->map_width++;
+	while (game->map[game->map_height][game->map_width])
+		game->map_height++;
+	return (TRUE);
 }
 
 int	main(int ac, char **av)
@@ -184,8 +241,11 @@ int	main(int ac, char **av)
 	}
 	// Initialiser la map
 	game.mlx = mlx_init();
+	game.ennemies = malloc(sizeof(t_ennemie *) * (nbr_of_ghost(game.map) + 1));
 	init_map(&game);
+	init_game(&game);
 	mlx_hook(game.mlx_win, 2, 1L<<0, key_hook, &game);
+	mlx_loop_hook(game.mlx, update_enemies, &game); // Enregistre la fonction de mise à jour des ennemis
 	mlx_loop(game.mlx);
 	// Libérer la mémoire à la fin
 	return (0);
