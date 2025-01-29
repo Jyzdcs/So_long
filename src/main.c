@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 19:19:22 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:49:44 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int close_window(t_game *game)
 	
 	mlx_destroy_window(game->mlx, game->mlx_win);
 	free_all_ptr((void **)game->map);
-	free_all_ptr((void **)game->ennemies);
-	// free((void **)game->ennemies);
+	free_all_ptr((void **)game->enemies);
+	// free((void **)game->enemies);
 	exit(0);
     return 0;
 }
@@ -61,10 +61,10 @@ void	init_player(t_game *game, int y, int x, int width, int height)
 
 void	init_ennemie(t_game *game, int y, int x)
 {
-	t_ennemie	*ghost;
+	t_enemie	*ghost;
 	int			size;
 
-	ghost = malloc(sizeof(t_ennemie));
+	ghost = malloc(sizeof(t_enemie));
 	if (!ghost)
 		return ;
 	size = 32;
@@ -72,10 +72,10 @@ void	init_ennemie(t_game *game, int y, int x)
 	ghost->id = game->index;
 	ghost->y = y;
 	ghost->direction = 0;
-	ghost->move = 1;
-	game->ennemies[game->index] = ghost;
-	game->ennemies[game->index]->img = mlx_xpm_file_to_image(game->mlx, "../textures/Ghosts/R/ghost_left1.xpm", &size, &size);
-	mlx_put_image_to_window(game->mlx, game->mlx_win, game->ennemies[game->index]->img, x * 32, y * 32);
+	ghost->move = RIGHT;
+	game->enemies[game->index] = ghost;
+	game->enemies[game->index]->img = mlx_xpm_file_to_image(game->mlx, "../textures/Ghosts/R/ghost_left1.xpm", &size, &size);
+	mlx_put_image_to_window(game->mlx, game->mlx_win, game->enemies[game->index]->img, x * 32, y * 32);
 	game->index++;
 }
 
@@ -85,7 +85,7 @@ void	init_map(t_game *game)
 	int		x;
 	int		height;
 
-	game->mlx_win = mlx_new_window(game->mlx, ft_strlen(game->map[0]) * 32, 15 * 32, "PacMan v2");
+	game->mlx_win = mlx_new_window(game->mlx, ft_strlen(game->map[0]) * 32, calcul_dim(game->map) * 32, "PacMan v2");
 	game->total_items = 0;
 	game->index = 0;
 
@@ -242,7 +242,7 @@ int	main(int ac, char **av)
 	}
 	// Initialiser la map
 	game.mlx = mlx_init();
-	game.ennemies = malloc(sizeof(t_ennemie *) * (nbr_of_ghost(game.map) + 1));
+	game.enemies = malloc(sizeof(t_enemie *) * (nbr_of_ghost(game.map) + 1));
 	init_map(&game);
 	init_game(&game);
 	mlx_hook(game.mlx_win, 2, 1L<<0, key_hook, &game);

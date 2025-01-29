@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 18:55:43 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/29 08:40:51 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct	s_texture {
 	int		endian;
 }				t_texture;
 
-typedef struct	s_ennemie
+typedef struct	s_enemie
 {
 	int	id;
 	int	y;
@@ -50,7 +50,7 @@ typedef struct	s_ennemie
 	int	move;
 	int	direction;
 	void *img;
-}				t_ennemie;
+}				t_enemie;
 
 
 typedef struct	win_dim {
@@ -89,7 +89,7 @@ typedef struct	s_game {
 	int		map_height;
 	int		map_width;
 	int		total_items;
-	t_ennemie	**ennemies;
+	t_enemie	**enemies;
 	int			index;
     t_player player;
 }				t_game;
