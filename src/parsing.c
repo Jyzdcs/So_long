@@ -6,38 +6,11 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:01:44 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 19:19:17 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:53:29 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-// t_bool is_valid_move(int x, int y, char **map, t_bool **visited) {
-//     return (map[y][x] != '1' && !visited[y][x]);
-// }
-
-// t_bool back_track(int x, int y, char **map, t_bool **visited) {
-//     if (map[y][x] == 'E') {
-//         return TRUE; // Sortie atteinte
-//     }
-
-//     visited[y][x] = TRUE; // Marquer comme visité
-
-//     // Directions : haut, bas, gauche, droite
-//     const int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-//     for (int i = 0; i < 4; i++) {
-//         int new_x = x + directions[i][0];
-//         int new_y = y + directions[i][1];
-
-//         if (is_valid_move(new_x, new_y, map, visited)) {
-//             if (back_track(new_x, new_y, map, visited)) {
-//                 return TRUE; // Sortie trouvée
-//             }
-//         }
-//     }
-//     visited[y][x] = FALSE; // Back_track
-//     return FALSE; // Aucune sortie trouvée
-// }
 
 int	is_valide_move(int y, int x, char **map, int **visited)
 {
@@ -104,6 +77,32 @@ int	back_track(int y, int x, char **map, int **visited, t_items **list)
 	return FALSE;
 }
 
+int	check_borders(char **map, int height, int width)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < height)
+	{
+		j = 0;
+		while (j < width)
+		{
+			if (i == 0 && map[i][j] != '1')
+				return (TRUE);
+			if (j == 0 && map[i][j] != '1')
+				return (TRUE);
+			if (j == width - 1 && map[i][j] != '1')
+				return (TRUE);
+			if (i == height - 1 && map[i][j] != '1')
+				return (TRUE);
+			j++;
+		}
+		i++;
+	}
+	return (FALSE);
+}
+
 int	**alloc_array_two_dim(char **map)
 {
 	int	**arr;
@@ -135,7 +134,7 @@ int is_map_feasible(char **map, int start_x, int start_y)
 	int **visited;
 	t_items	*items;
 	
-	visited = alloc_array_two_dim(map); // Allouer un tableau pour les cases visitées
+	visited = alloc_array_two_dim(map);
 	if (!visited)
 		return (0);
 	items = ft_lstnew(start_y, start_x);
@@ -179,7 +178,7 @@ int	not_a_rect(char **map)
 	return (0);
 }
 
-int	is_valid(char **map)
+int	is_valid(char **map, t_game *game)
 {
 	t_bool	**visited;
 	int	i;
@@ -217,6 +216,8 @@ int	is_valid(char **map)
 		i++;
 	}
 	if (not_a_rect(map))
+		return (FALSE);
+	if (check_borders(map, game->map_height, game->map_width))
 		return (FALSE);
 	if (!exit || !item || !player)
 		return (FALSE);

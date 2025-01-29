@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:30:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/29 11:45:37 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:36:37 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ void	sprites_ghost(t_game *game, t_enemie *enemy, int direction)
 
 	size = 32;
 	if (direction == DOWN)
-		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/Ghosts/R/ghost_down2.xpm", &size, &size);
+		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/R/ghost_down2.xpm", &size, &size);
 	else if (direction == UP)
-		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/Ghosts/R/ghost_up2.xpm", &size, &size);
+		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/R/ghost_up2.xpm", &size, &size);
 	else if (direction == RIGHT)
-		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/Ghosts/R/ghost_right2.xpm", &size, &size);
+		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/R/ghost_right2.xpm", &size, &size);
 	else if (direction == LEFT)
-		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/Ghosts/R/ghost_left2.xpm", &size, &size);
+		enemy->img = mlx_xpm_file_to_image(game->mlx, "../textures/R/ghost_left2.xpm", &size, &size);
 }
 
 static void clear_enemy(t_game *game, int i, int x, int y)
@@ -48,7 +48,7 @@ static void clear_enemy(t_game *game, int i, int x, int y)
 	eraser = fill_square(game->mlx, 32, 32, 0x00000000);
     mlx_put_image_to_window(game->mlx, game->mlx_win, eraser.img, x * 32, y * 32);
 	if (game->map[game->enemies[i]->y][game->enemies[i]->x] == 'C')
-		place_texture(game, game->enemies[i]->y, game->enemies[i]->x, "../textures/Other/Pacdots/pacdot_food.xpm");
+		place_texture(game, game->enemies[i]->y, game->enemies[i]->x, "../textures/pacdot_food.xpm");
 	if (game->map[game->enemies[i]->y][game->enemies[i]->x] == 'E')
 		place_texture(game, game->enemies[i]->y, game->enemies[i]->x, "../textures/exit.xpm");
  }

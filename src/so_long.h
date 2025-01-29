@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/29 08:40:51 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:31:44 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,7 @@ t_texture	fill_square(void *mlx, int width, int height, int color);
 int 		key_hook(int keycode, t_game *game);
 int 		close_window(t_game *game);
 void		place_texture(t_game *game, int y, int x, char *path);
-int			is_valid(char **map);
 int			update_enemies(t_game *game);
-static void	move_vertical(t_game *game, int i, int new_call);
+int			is_valid(char **map, t_game *game);
 
 #endif

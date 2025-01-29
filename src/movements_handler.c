@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:50:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/28 17:31:49 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:38:53 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,25 @@ void	movement_select(t_game *game, int direction)
 
 	if (direction == UP)
 	{
-		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/Pac-Man/pac_semi_up.xpm", &(game->player.height), &(game->player.width));
+		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/pac_semi_up.xpm", &(game->player.height), &(game->player.width));
 		mlx_put_image_to_window(game->mlx, game->mlx_win, player.img,
 			game->player.x * 32, game->player.y * 32);
 	}
 	else if (direction == DOWN)
 	{
-		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/Pac-Man/pac_semi_down.xpm", &(game->player.height), &(game->player.width));
+		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/pac_semi_down.xpm", &(game->player.height), &(game->player.width));
 		mlx_put_image_to_window(game->mlx, game->mlx_win, player.img,
 			game->player.x * 32, game->player.y * 32);
 	}
 	else if (direction == RIGHT)
 	{
-		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/Pac-Man/pac_semi_right.xpm", &(game->player.height), &(game->player.width));
+		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/pac_semi_right.xpm", &(game->player.height), &(game->player.width));
 		mlx_put_image_to_window(game->mlx, game->mlx_win, player.img,
 			game->player.x * 32, game->player.y * 32);
 	}
 	else if (direction == LEFT)
 	{
-		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/Pac-Man/pac_semi_left.xpm", &(game->player.height), &(game->player.width));
+		player.img = mlx_xpm_file_to_image(game->mlx, "../textures/pac_semi_left.xpm", &(game->player.height), &(game->player.width));
 		mlx_put_image_to_window(game->mlx, game->mlx_win, player.img,
 			game->player.x * 32, game->player.y * 32);
 	}
@@ -112,7 +112,6 @@ static int move_player(t_game *game, int direction)
 	handle_collectible_and_exit(game);
 	update_hitbox(game, direction);
 	movement_select(game, direction);
-	// printf("pos %d|%d\n", game->player.y, game->player.x);
 	return (1);
 }
 
