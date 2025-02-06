@@ -1,8 +1,8 @@
 NAME		= so_long
-CC			= cc
-# CFLAGS		= -Wall -Wextra -Werror -Iminilibx_opengl_20191021
-MLX_FLAGS	= -framework OpenGL -framework AppKit
-MLX_LIB		= ../minilibx_opengl_20191021/libmlx.a
+CC		= cc
+CFLAGS	= -Wall -Wextra -Werror -Imlx_linux
+MLX_FLAGS	= -Lmlx_linux -lXext -lX11 -lm -lz
+MLX_LIB	= ../minilibx-linux/libmlx.a
 LIBFT		= ../includes/libft/libft.a
 GNL		= ../includes/libft/get_next_line.a
 
@@ -13,15 +13,15 @@ OBJS		= $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(MAKE) -C ../minilibx_opengl_20191021
+	$(MAKE) -C ../minilibx-linux/
 	$(MAKE) -C ../includes/libft
-	$(CC) $(OBJS) $(LIBFT) $(MLX_LIB) $(MLX_FLAGS) $ -o $(NAME) -g
+	$(CC) $(OBJS) $(LIBFT) $(MLX_LIB) $(MLX_FLAGS) -o $(NAME) -g
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) -c $< -o $@
 
 clean:
-	$(MAKE) -C ../minilibx_opengl_20191021 clean
+	$(MAKE) -C ../minilibx-linux clean
 	$(MAKE) -C ../includes/libft clean
 	rm -f $(OBJS)
 

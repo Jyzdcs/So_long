@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:01:44 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/29 16:53:29 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:27:53 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ int	not_visited(t_items *list, int y, int x)
 
 int	back_track(int y, int x, char **map, int **visited, t_items **list)
 {
-	int	i;
-	
 	if ((map[y][x] == 'E' || map[y][x] == 'C') && not_visited((*list)->next, y, x))
 	{
 		ft_lstadd_back(list, ft_lstnew(y, x));
@@ -63,7 +61,6 @@ int	back_track(int y, int x, char **map, int **visited, t_items **list)
 	}
 	if ((*list)->counter == numbers_items(map))
 		return (TRUE);
-	i = 0;
 	visited[y][x] = TRUE;
 	if (is_valide_move(y, x + 1, map, visited) && back_track(y, x + 1, map, visited, list))
 			return (TRUE);
@@ -147,7 +144,7 @@ int is_map_feasible(char **map, int start_x, int start_y)
 	}
 	ft_lstclear(&items, free);
 	free_all_ptr((void **)visited);
-    return FALSE;
+	return FALSE;
 }
 
 int	not_a_rect(char **map)
@@ -180,11 +177,8 @@ int	not_a_rect(char **map)
 
 int	is_valid(char **map, t_game *game)
 {
-	t_bool	**visited;
 	int	i;
 	int	j;
-	int	x;
-	int	y;
 	int	exit;
 	int	item;
 	int	player;
@@ -203,11 +197,7 @@ int	is_valid(char **map, t_game *game)
 			if (map[i][j] == 'C' && !item)
 				item++;
 			if (map[i][j] == 'P' && !player)
-			{
-				y = i;
-				x = j;
 				player++;
-			}
 			if (map[i][j] != 'P' && map[i][j] != 'C' && map[i][j] != 'E'
 				&& map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'G')
 				return (FALSE);
@@ -221,7 +211,7 @@ int	is_valid(char **map, t_game *game)
 		return (FALSE);
 	if (!exit || !item || !player)
 		return (FALSE);
-	if (!is_map_feasible(map, x, y))
-		return (FALSE);
+	// if (!is_map_feasible(map, x, y))
+	// 	return (FALSE);
 	return (TRUE);
 }

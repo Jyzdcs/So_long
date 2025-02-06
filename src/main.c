@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/29 16:42:27 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:22:03 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,11 @@
 
 int close_window(t_game *game)
 {
-	int	i;
-	
 	mlx_destroy_window(game->mlx, game->mlx_win);
 	free_all_ptr((void **)game->map);
 	free_all_ptr((void **)game->enemies);
 	exit(0);
-    return 0;
+	return 0;
 }
 
 void	place_texture(t_game *game, int y, int x, char *path)
@@ -41,7 +39,7 @@ int		calcul_dim(char **map)
 	return (y);
 }
 
-void	init_player(t_game *game, int y, int x, int width, int height)
+void	init_player(t_game *game, int y, int x)
 {
 	game->player.x = x;
 	game->player.y = y;
@@ -82,9 +80,8 @@ void	init_map(t_game *game)
 {
 	int		y;
 	int		x;
-	int		height;
 
-	game->mlx_win = mlx_new_window(game->mlx, ft_strlen(game->map[0]) * 32, calcul_dim(game->map) * 32, "PacMan v2");
+	game->mlx_win = mlx_new_window(game->mlx, game->map_width * 32, game->map_height * 32, "PacMan v2");
 	game->total_items = 0;
 	game->index = 0;
 
@@ -97,7 +94,7 @@ void	init_map(t_game *game)
 			if (game->map[y][x] == '1')
 				place_texture(game, y, x, "../textures/Walls/wall.xpm");
 			else if (game->map[y][x] == 'P')
-				init_player(game, y, x, 32, 32);
+				init_player(game, y, x);
 			else if (game->map[y][x] == 'G')
 				init_ennemie(game, y, x);
 			else if (game->map[y][x] == 'E')
@@ -122,9 +119,13 @@ int	get_extension(char *str)
 
 	i = 0;
 	path = ft_split(str, '/');
+	if (!path)
+		return (1);
 	while (path[i + 1])
 		i++;
 	file_name = ft_split(path[i], '.');
+	if (!file_name)
+		return (1);
 	i = 0;
 	while (file_name[i + 1])
 		i++;
@@ -134,6 +135,8 @@ int	get_extension(char *str)
 		free_all_ptr((void **)file_name);
 		return (1);
 	}
+	free_all_ptr((void **)path);
+	free_all_ptr((void **)file_name);
 	return (0);
 }
 
@@ -183,11 +186,11 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 		return (printf("Error: wrong number of arguments\n"));
-	if (get_extension(av[1]))
-	{
-		printf("ERROR OF EXTENSION\n");
-		return (0);
-	}
+	// if (get_extension(av[1]))
+	// {
+	// 	printf("ERROR OF EXTENSION\n");
+	// 	return (0);
+	// }
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
 		return (printf("ERROR: Cannot open file\n"));
@@ -236,7 +239,11 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	game.mlx = mlx_init();
-	game.enemies = malloc(sizeof(t_enemie *) * (nbr_of_ghost(game.map) + 1));
+	if (!game.mlx)
+	{
+		printf("ERREUR lors de l'initialisation de mlx\n");
+		return (1);
+	}
 	init_map(&game);
 	mlx_hook(game.mlx_win, 2, 1L<<0, key_hook, &game);
 	mlx_hook(game.mlx_win, 17, 0, close_window, &game);

@@ -39,7 +39,7 @@ char	*alloc_word_memory(char const *s, char sep)
 	len = 0;
 	while (s[len] != sep && s[len])
 		len++;
-	tab = malloc(sizeof(char) * len + 1);
+	tab = malloc(sizeof(char) * (len + 1));
 	if (tab == NULL)
 		return (NULL);
 	i = -1;
@@ -67,7 +67,7 @@ char	**ft_split(char const *s, char c)
 	int const	nbr_of_words = count_words(s, c);
 	char		**tab;
 
-	tab = malloc(sizeof(char *) * nbr_of_words + 1);
+	tab = malloc(sizeof(char *) * (nbr_of_words + 1));
 	if (tab == NULL)
 		return (NULL);
 	i = 0;
