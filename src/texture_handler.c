@@ -20,6 +20,8 @@ void	place_texture(t_game *game, int y, int x, char *path)
 		&(game->player.width), &(game->player.height));
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		texture.img, x * 32, y * 32);
+	mlx_destroy_image(game->mlx, texture.img);
+	
 }
 
 void	init_map(t_game *game)

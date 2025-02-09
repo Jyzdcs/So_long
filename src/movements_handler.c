@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:50:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/08 23:47:21 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:22:05 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	update_player_position(t_game *game, int new_x, int new_y)
 	game->player.y = new_y;
 	mlx_put_image_to_window(game->mlx, game->mlx_win, eraser.img,
 		game->player.old_x * 32, game->player.old_y * 32);
+	mlx_destroy_image(game->mlx, eraser.img);
 }
 
 static void	handle_collectible_and_exit(t_game *game)
@@ -85,6 +86,7 @@ static void	movement_select(t_game *game, int direction)
 			&(game->player.height), &(game->player.width));
 	mlx_put_image_to_window(game->mlx, game->mlx_win, player.img,
 		game->player.x * 32, game->player.y * 32);
+	mlx_destroy_image(game->mlx, player.img);
 }
 
 static int	move_player(t_game *game, int direction)
@@ -114,6 +116,7 @@ int	key_hook(int keycode, t_game *game)
 	int	moved;
 
 	moved = 0;
+	printf("%d\n", keycode);
 	if (keycode == ESC)
 		close_window(game);
 	else if (keycode == W_KEY || keycode == UP_ARROW)

@@ -12,12 +12,35 @@
 
 #include "so_long.h"
 
+void	free_all_img(t_game *game)
+{
+	int	i;
+
+	i = 0;
+	while (game->enemies[i])
+	{
+		mlx_destroy_image(game->mlx, game->enemies[i]->img);
+		i++;
+	}
+}
+
 int	close_window(t_game *game)
 {
 	mlx_destroy_window(game->mlx, game->mlx_win);
+	mlx_destroy_display(game->mlx);
+	free(game->mlx);
 	free_all_ptr((void **)game->map);
-	if (game->index != 0)
-		free_all_ptr((void **)game->enemies);
+	free_all_ptr((void **)game->enemies);
+	// mlx_destroy_window(game->mlx, game->mlx_win);
+	// free_all_ptr((void **)game->map);
+	// if (game->index != 0)
+	// {
+	// 	for (int i = 0; game->enemies[i]; i++)
+	// 		free(game->enemies[i]);
+	// 	free(game->enemies);
+	// }
+	// game->map = NULL;
+	// game->enemies = NULL;
 	exit(0);
 	return (0);
 }
@@ -40,14 +63,6 @@ int	get_extension(char *str)
 	i = 0;
 	while (file_name[i + 1])
 		i++;
-	if (ft_strcmp(file_name[i], "ber") != 0)
-	{
-		free_all_ptr((void **)path);
-		free_all_ptr((void **)file_name);
-		return (1);
-	}
-	free_all_ptr((void **)path);
-	free_all_ptr((void **)file_name);
 	return (0);
 }
 

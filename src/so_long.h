@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/09 00:12:52 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/09 15:36:04 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 #define RIGHT 4
 
 // Key codes
-#define ESC 65367
+#define ESC 65307
 #define W_KEY 119
 #define S_KEY 115
 #define A_KEY 97
@@ -129,8 +129,7 @@ int			is_valid(char **map, t_game *game);
 /* utils.c */
 void		my_mlx_pixel_put(t_texture *data, int x, int y, int color);
 t_texture	fill_square(void *mlx, int width, int height, int color);
-void		free_game_resources(t_game *game);
-void		ft_error(const char *str);
+int		ft_error(const char *str);
 
 
 #endif

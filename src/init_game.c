@@ -31,6 +31,7 @@ void	init_player(t_game *game, int y, int x)
 	game->player.hitbox.bot_y = y + 1;
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		game->player.img.img, x * 32, y * 32);
+	mlx_destroy_image(game->mlx, game->player.img.img);
 }
 
 void	init_ennemie(t_game *game, int y, int x)
@@ -39,7 +40,7 @@ void	init_ennemie(t_game *game, int y, int x)
 	int			size;
 
 	size = 32;
-	ghost = malloc(sizeof(t_enemie));
+	ghost = ft_calloc(1, sizeof(t_enemie));
 	if (!ghost)
 		return ;
 	ghost->x = x;
@@ -52,6 +53,7 @@ void	init_ennemie(t_game *game, int y, int x)
 			"../textures/R/ghost_left2.xpm", &size, &size);
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		game->enemies[game->index]->img, x * 32, y * 32);
+	mlx_destroy_image(game->mlx, game->enemies[game->index]->img);
 	game->index++;
 }
 

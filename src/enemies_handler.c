@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:30:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/09 00:14:40 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:25:51 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	clear_enemy(t_game *game, int i, int x, int y)
 	eraser = fill_square(game->mlx, 32, 32, 0x00000000);
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		eraser.img, x * 32, y * 32);
+	mlx_destroy_image(game->mlx, eraser.img);
 	if (game->map[game->enemies[i]->y][game->enemies[i]->x] == 'C')
 		place_texture(game, game->enemies[i]->y,
 			game->enemies[i]->x, "../textures/pacdot_food.xpm");
@@ -134,7 +135,7 @@ int	update_enemies(t_game *game)
 	int			i;
 
 	update_counter++;
-	if (update_counter % 2000 != 0)
+	if (update_counter % 8000 != 0)
 		return (1);
 	i = 0;
 	while (i < game->index)
@@ -150,6 +151,7 @@ int	update_enemies(t_game *game)
 			game->enemies[i]->img,
 			game->enemies[i]->x * 32,
 			game->enemies[i]->y * 32);
+		mlx_destroy_image(game->mlx, game->enemies[i]->img);
 		i++;
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:01:44 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/08 23:51:42 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/09 14:57:04 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,14 +112,14 @@ static int	**alloc_array_two_dim(char **map)
 		width++;
 	while (map[height])
 		height++;
-	arr = malloc(sizeof(int *) * (height + 1));
+	arr = ft_calloc((height + 1), sizeof(int *));
 	if (!arr)
 		return (NULL);
 	arr[height + 1] = NULL;
 	height = 0;
 	while (map[height])
 	{
-		arr[height] = malloc(sizeof(int) * width);
+		arr[height] = ft_calloc(width, sizeof(int));
 		if (!arr[height++])
 			return (NULL);
 	}
