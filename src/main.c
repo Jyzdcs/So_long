@@ -266,6 +266,7 @@ int	main(int ac, char **av)
 	if (!load_map_content(&game, av[1], map_height))
 		return (perror("ERROR: Reading file failed"));
 	init_game(&game);
+	game.enemies = ft_calloc((nbr_of_ghost(game.map) + 1), sizeof(t_enemie *));
 	if (!is_valid(game.map, &game))
 	{
 		free_game_resources(&game);
