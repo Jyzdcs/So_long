@@ -6,20 +6,20 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:01:44 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/29 18:27:53 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/08 23:51:42 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	is_valide_move(int y, int x, char **map, int **visited)
+static int	is_valide_move(int y, int x, char **map, int **visited)
 {
 	if (map[y][x] != '1' && !visited[y][x])
 		return (TRUE);
 	return (FALSE);
 }
 
-int	numbers_items(char **map)
+static int	numbers_items(char **map)
 {
 	int	tot_items;
 	int	i;
@@ -41,7 +41,7 @@ int	numbers_items(char **map)
 	return (tot_items);
 }
 
-int	not_visited(t_items *list, int y, int x)
+static int	not_visited(t_items *list, int y, int x)
 {
 	while (list)
 	{
@@ -52,9 +52,10 @@ int	not_visited(t_items *list, int y, int x)
 	return (TRUE);
 }
 
-int	back_track(int y, int x, char **map, int **visited, t_items **list)
+static int	back_track(int y, int x, char **map, int **visited, t_items **list)
 {
-	if ((map[y][x] == 'E' || map[y][x] == 'C') && not_visited((*list)->next, y, x))
+	if ((map[y][x] == 'E' || map[y][x] == 'C') 
+		&& not_visited((*list)->next, y, x))
 	{
 		ft_lstadd_back(list, ft_lstnew(y, x));
 		(*list)->counter++;
@@ -62,19 +63,23 @@ int	back_track(int y, int x, char **map, int **visited, t_items **list)
 	if ((*list)->counter == numbers_items(map))
 		return (TRUE);
 	visited[y][x] = TRUE;
-	if (is_valide_move(y, x + 1, map, visited) && back_track(y, x + 1, map, visited, list))
-			return (TRUE);
-	if (is_valide_move(y,  x - 1, map, visited) && back_track(y, x - 1, map, visited, list))
-			return (TRUE);
-	if (is_valide_move(y + 1, x, map, visited) && back_track(y + 1, x, map, visited, list))
-			return (TRUE);
-	if (is_valide_move(y - 1, x, map, visited) && (back_track(y - 1, x, map, visited, list)))
-			return (TRUE);
+	if (is_valide_move(y, x + 1, map, visited) 
+		&& back_track(y, x + 1, map, visited, list))
+		return (TRUE);
+	if (is_valide_move(y, x - 1, map, visited) 
+		&& back_track(y, x - 1, map, visited, list))
+		return (TRUE);
+	if (is_valide_move(y + 1, x, map, visited) 
+		&& back_track(y + 1, x, map, visited, list))
+		return (TRUE);
+	if (is_valide_move(y - 1, x, map, visited) 
+		&& back_track(y - 1, x, map, visited, list))
+		return (TRUE);
 	visited[y][x] = FALSE;
-	return FALSE;
+	return (FALSE);
 }
 
-int	check_borders(char **map, int height, int width)
+static int	check_borders(char **map, int height, int width)
 {
 	int	i;
 	int	j;
@@ -85,13 +90,8 @@ int	check_borders(char **map, int height, int width)
 		j = 0;
 		while (j < width)
 		{
-			if (i == 0 && map[i][j] != '1')
-				return (TRUE);
-			if (j == 0 && map[i][j] != '1')
-				return (TRUE);
-			if (j == width - 1 && map[i][j] != '1')
-				return (TRUE);
-			if (i == height - 1 && map[i][j] != '1')
+			if ((i == 0 || i == height - 1 || j == 0 || j == width - 1) 
+				&& map[i][j] != '1')
 				return (TRUE);
 			j++;
 		}
@@ -100,11 +100,11 @@ int	check_borders(char **map, int height, int width)
 	return (FALSE);
 }
 
-int	**alloc_array_two_dim(char **map)
+static int	**alloc_array_two_dim(char **map)
 {
 	int	**arr;
-	int		height;
-	int		width;
+	int	height;
+	int	width;
 
 	height = 0;
 	width = 0;
@@ -126,11 +126,11 @@ int	**alloc_array_two_dim(char **map)
 	return (arr);
 }
 
-int is_map_feasible(char **map, int start_x, int start_y)
+static int	is_map_feasible(char **map, int start_x, int start_y)
 {
-	int **visited;
+	int		**visited;
 	t_items	*items;
-	
+
 	visited = alloc_array_two_dim(map);
 	if (!visited)
 		return (0);
@@ -144,13 +144,13 @@ int is_map_feasible(char **map, int start_x, int start_y)
 	}
 	ft_lstclear(&items, free);
 	free_all_ptr((void **)visited);
-	return FALSE;
+	return (FALSE);
 }
 
-int	not_a_rect(char **map)
+static int	not_a_rect(char **map)
 {
 	int	i;
-	int j;
+	int	j;
 	int	width;
 	int	height;
 
@@ -205,13 +205,8 @@ int	is_valid(char **map, t_game *game)
 		}
 		i++;
 	}
-	if (not_a_rect(map))
+	if (not_a_rect(map) || check_borders(map, game->map_height, game->map_width)
+		|| !exit || !item || !player)
 		return (FALSE);
-	if (check_borders(map, game->map_height, game->map_width))
-		return (FALSE);
-	if (!exit || !item || !player)
-		return (FALSE);
-	// if (!is_map_feasible(map, x, y))
-	// 	return (FALSE);
 	return (TRUE);
 }
