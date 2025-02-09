@@ -22,22 +22,22 @@
 # define TRUE 1
 # define FALSE 0
 
-/* Directions */
-# define UP 1
-# define DOWN 2
-# define LEFT 3
-# define RIGHT 4
+// Directions
+#define UP 1
+#define DOWN 2
+#define LEFT 3
+#define RIGHT 4
 
-/* Key codes */
-# define ESC 53
-# define W_KEY 13
-# define S_KEY 1
-# define A_KEY 0
-# define D_KEY 2
-# define UP_ARROW 126
-# define DOWN_ARROW 125
-# define LEFT_ARROW 123
-# define RIGHT_ARROW 124
+// Key codes
+#define ESC 65367
+#define W_KEY 119
+#define S_KEY 115
+#define A_KEY 97
+#define D_KEY 100
+#define UP_ARROW 65362
+#define DOWN_ARROW 65364
+#define LEFT_ARROW 65361
+#define RIGHT_ARROW 65363
 
 typedef struct s_texture
 {
