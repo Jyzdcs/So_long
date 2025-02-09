@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/09 17:22:49 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/09 18:51:05 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,15 @@ int	main(int ac, char **av)
 		free_all_ptr((void **)game.map);
 		return (ft_error("Error allocation"));
 	}
-	if (is_valid(game.map, &game) && initialize_mlx(&game))
+	if (!is_valid(game.map, &game))
 	{
-		setup_hooks(&game);
+		free_all_ptr((void **)game.map);
+		free_all_ptr((void **)game.enemies);
+		return (ft_error("ERROR: Map invalid"));
 	}
+	// initialize_mlx(&game)
+	// setup_hooks(&game);
 	free_all_ptr((void **)game.map);
+	free_all_ptr((void **)game.enemies);
 	return (0);
 }
