@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:24:59 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/01/18 16:58:23 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:17:25 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ char	*ft_next(char *buffer)
 		return (NULL);
 	}
 	line = ft_calloc(ft_strlen(buffer) - i + 1, 1);
+	if (!line)
+		return (NULL);
 	i++;
 	j = 0;
 	while (buffer[i])
@@ -73,6 +75,8 @@ char	*read_file(int fd, char *res)
 		res = ft_calloc(1, 1);
 	byte_read = 1;
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!buffer)
+		return (NULL);
 	while (byte_read > 0)
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);

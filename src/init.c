@@ -16,7 +16,7 @@ int	initialize_mlx(t_game *game)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
-		return (0);
+		return (close_window(game));
 	init_map_dimensions(game);
 	init_map(game);
 	return (1);

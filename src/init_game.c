@@ -24,7 +24,10 @@ void	init_player(t_game *game, int y, int x)
 			&(game->player.width),
 			&(game->player.height));
 	if (!game->player.img.img)
-		perror("ERROR OF FILE");
+	{
+		ft_error("ERROR: Xpm file error");
+		close_window(game);
+	}
 	game->player.hitbox.back_x = x - 1;
 	game->player.hitbox.front_x = x + 1;
 	game->player.hitbox.top_y = y - 1;
@@ -51,6 +54,11 @@ void	init_ennemie(t_game *game, int y, int x)
 	game->enemies[game->index] = ghost;
 	game->enemies[game->index]->img = mlx_xpm_file_to_image(game->mlx,
 			"../textures/R/ghost_left2.xpm", &size, &size);
+	if (!game->enemies)
+	{
+		ft_error("ERROR: Texture of enemies didnt find");
+		close_window(game);
+	}
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		game->enemies[game->index]->img, x * 32, y * 32);
 	mlx_destroy_image(game->mlx, game->enemies[game->index]->img);
@@ -78,6 +86,8 @@ int	init_map_dimensions(t_game *game)
 			game->map_width * 32,
 			game->map_height * 32,
 			"PacMan v2");
+	if (!game->mlx_win)
+		return (close_window(game));
 	game->total_items = 0;
 	game->index = 0;
 	return (TRUE);

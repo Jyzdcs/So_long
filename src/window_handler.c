@@ -12,25 +12,19 @@
 
 #include "so_long.h"
 
-void	free_all_img(t_game *game)
-{
-	int	i;
-
-	i = 0;
-	while (game->enemies[i])
-	{
-		mlx_destroy_image(game->mlx, game->enemies[i]->img);
-		i++;
-	}
-}
-
 int	close_window(t_game *game)
 {
-	mlx_destroy_window(game->mlx, game->mlx_win);
-	mlx_destroy_display(game->mlx);
-	free(game->mlx);
-	free_all_ptr((void **)game->map);
-	free_all_ptr((void **)game->enemies);
+	if (game->mlx && game->mlx_win)
+		mlx_destroy_window(game->mlx, game->mlx_win);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
+	if (game->map)
+		free_all_ptr((void **)game->map);
+	if (game->enemies)
+		free_all_ptr((void **)game->enemies);
 	exit(0);
 	return (0);
 }

@@ -18,6 +18,11 @@ void	place_texture(t_game *game, int y, int x, char *path)
 
 	texture.img = mlx_xpm_file_to_image(game->mlx, path,
 			&(game->player.width), &(game->player.height));
+	if (!texture.img)
+	{
+		ft_error("ERROR: Image in place texture not found");
+		return (close_window(game));
+	}
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		texture.img, x * 32, y * 32);
 	mlx_destroy_image(game->mlx, texture.img);
