@@ -6,7 +6,9 @@ MLX_LIB	= ../minilibx-linux/libmlx.a
 LIBFT		= ../includes/libft/libft.a
 GNL		= ../includes/libft/get_next_line.a
 
-SRCS		= main.c movements_handler.c filler.c parsing.c enemies_handler.c texture_handler.c window_handler.c init_game.c utils.c
+SRCS		= main.c movements_handler.c filler.c parsing.c enemies_handler.c texture_handler.c \
+		window_handler.c init_game.c utils.c backtracking.c backtracking_utils.c \
+		enemies_handler_utils.c init.c movements_handler_utils.c
 
 OBJS		= $(SRCS:.c=.o)
 

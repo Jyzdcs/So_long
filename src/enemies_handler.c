@@ -6,49 +6,11 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:30:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/09 17:25:51 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:57:55 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-static int	custom_rand(void)
-{
-	static unsigned int	seed = 42;
-
-	seed = (1103515245 * seed + 12345) % 2147483648;
-	return (seed);
-}
-
-static int	get_random_direction(void)
-{
-	int	directions[4];
-
-	directions[0] = RIGHT;
-	directions[1] = UP;
-	directions[2] = LEFT;
-	directions[3] = DOWN;
-	return (directions[custom_rand() % 4]);
-}
-
-static void	sprites_ghost(t_game *game, t_enemie *enemy, int direction)
-{
-	int	size;
-
-	size = 32;
-	if (direction == DOWN)
-		enemy->img = mlx_xpm_file_to_image(game->mlx,
-				"../textures/R/ghost_down2.xpm", &size, &size);
-	else if (direction == UP)
-		enemy->img = mlx_xpm_file_to_image(game->mlx,
-				"../textures/R/ghost_up2.xpm", &size, &size);
-	else if (direction == RIGHT)
-		enemy->img = mlx_xpm_file_to_image(game->mlx,
-				"../textures/R/ghost_right2.xpm", &size, &size);
-	else if (direction == LEFT)
-		enemy->img = mlx_xpm_file_to_image(game->mlx,
-				"../textures/R/ghost_left2.xpm", &size, &size);
-}
 
 static void	clear_enemy(t_game *game, int i, int x, int y)
 {
@@ -66,41 +28,39 @@ static void	clear_enemy(t_game *game, int i, int x, int y)
 			game->enemies[i]->x, "../textures/exit.xpm");
 }
 
-static int	check_collision(t_game *game, int i)
+static void	handle_move2(t_game *game, char **map, int i, int move)
 {
-	if (game->enemies[i]->x == game->player.x
-		&& game->enemies[i]->y == game->player.y)
+	if (move == LEFT
+		&& map[game->enemies[i]->y][game->enemies[i]->x - 1] != '1')
 	{
-		perror("Game Over! Ghost caught you!");
-		close_window(game);
-		return (1);
+		game->enemies[i]->x--;
+		game->enemies[i]->move = LEFT;
 	}
-	return (0);
+	else if (move == DOWN
+		&& map[game->enemies[i]->y + 1][game->enemies[i]->x] != '1')
+	{
+		game->enemies[i]->y++;
+		game->enemies[i]->move = DOWN;
+	}
 }
 
 static void	handle_move(t_game *game, char **map, int i, int move)
 {
 	clear_enemy(game, i, game->enemies[i]->x, game->enemies[i]->y);
-	if (move == RIGHT && map[game->enemies[i]->y][game->enemies[i]->x + 1] != '1')
+	if (move == RIGHT
+		&& map[game->enemies[i]->y][game->enemies[i]->x + 1] != '1')
 	{
 		game->enemies[i]->x++;
 		game->enemies[i]->move = RIGHT;
 	}
-	else if (move == UP && map[game->enemies[i]->y - 1][game->enemies[i]->x] != '1')
+	else if (move == UP
+		&& map[game->enemies[i]->y - 1][game->enemies[i]->x] != '1')
 	{
 		game->enemies[i]->y--;
 		game->enemies[i]->move = UP;
 	}
-	else if (move == LEFT && map[game->enemies[i]->y][game->enemies[i]->x - 1] != '1')
-	{
-		game->enemies[i]->x--;
-		game->enemies[i]->move = LEFT;
-	}
-	else if (move == DOWN && map[game->enemies[i]->y + 1][game->enemies[i]->x] != '1')
-	{
-		game->enemies[i]->y++;
-		game->enemies[i]->move = DOWN;
-	}
+	else if (move == LEFT || move == DOWN)
+		handle_move2(game, map, i, move);
 	else
 		game->enemies[i]->direction = 1;
 }

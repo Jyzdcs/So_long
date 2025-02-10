@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/10 11:51:17 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:08:28 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ static int	read_map_height(char *file_path)
 	if (fd < 0)
 		return (-1);
 	map_height = 0;
-	line = NULL;
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
 		map_height++;
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (map_height);
@@ -59,16 +60,6 @@ static int	load_map_content(t_game *game, char *file_path, int map_height)
 	return (1);
 }
 
-static int	initialize_mlx(t_game *game)
-{
-	game->mlx = mlx_init();
-	if (!game->mlx)
-		return (0);
-	init_map_dimensions(game);
-	init_map(game);
-	return (1);
-}
-
 static void	setup_hooks(t_game *game)
 {
 	mlx_hook(game->mlx_win, 2, 1L << 0, key_hook, game);
@@ -77,9 +68,8 @@ static void	setup_hooks(t_game *game)
 	mlx_loop(game->mlx);
 }
 
-int	main(int ac, char **av)
+int	basic_parse(int ac, char **av, t_game *game)
 {
-	t_game	game;
 	int		map_height;
 
 	if (ac != 2)
@@ -87,11 +77,19 @@ int	main(int ac, char **av)
 	map_height = read_map_height(av[1]);
 	if (map_height < 0)
 		return (ft_error("ERROR: Cannot open file"));
-	game.map = (char **)ft_calloc((map_height + 1), sizeof(char *));
-	if (!game.map)
+	game->map = (char **)ft_calloc((map_height + 1), sizeof(char *));
+	if (!game->map)
 		return (ft_error("ERROR: Memory allocation failed"));
-	if (!load_map_content(&game, av[1], map_height))
+	if (!load_map_content(game, av[1], map_height))
 		return (ft_error("ERROR: Reading file failed"));
+}
+
+int	main(int ac, char **av)
+{
+	t_game	game;
+
+	if (!basic_parse(ac, av, &game))
+		return (0);
 	init_game(&game);
 	game.enemies = ft_calloc((nbr_of_ghost(game.map) + 1), sizeof(t_enemie *));
 	if (!game.enemies)
@@ -105,9 +103,7 @@ int	main(int ac, char **av)
 		free_all_ptr((void **)game.enemies);
 		return (ft_error("ERROR: Map invalid"));
 	}
-	// initialize_mlx(&game)
-	// setup_hooks(&game);
-	free_all_ptr((void **)game.map);
-	free_all_ptr((void **)game.enemies);
+	initialize_mlx(&game);
+	setup_hooks(&game);
 	return (0);
 }

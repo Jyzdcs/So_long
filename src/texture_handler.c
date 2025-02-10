@@ -17,11 +17,10 @@ void	place_texture(t_game *game, int y, int x, char *path)
 	t_texture	texture;
 
 	texture.img = mlx_xpm_file_to_image(game->mlx, path,
-		&(game->player.width), &(game->player.height));
+			&(game->player.width), &(game->player.height));
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		texture.img, x * 32, y * 32);
 	mlx_destroy_image(game->mlx, texture.img);
-	
 }
 
 void	init_map(t_game *game)
@@ -32,8 +31,8 @@ void	init_map(t_game *game)
 	y = 0;
 	while (game->map[y])
 	{
-		x = 0;
-		while (game->map[y][x])
+		x = -1;
+		while (game->map[y][++x])
 		{
 			if (game->map[y][x] == '1')
 				place_texture(game, y, x, "../textures/Walls/wall.xpm");
@@ -48,7 +47,6 @@ void	init_map(t_game *game)
 				place_texture(game, y, x, "../textures/pacdot_food.xpm");
 				game->total_items++;
 			}
-			x++;
 		}
 		y++;
 	}
@@ -62,4 +60,4 @@ int	calcul_dim(char **map)
 	while (map[y])
 		y++;
 	return (y);
-} 
+}

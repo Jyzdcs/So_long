@@ -24,7 +24,7 @@ void	init_player(t_game *game, int y, int x)
 			&(game->player.width),
 			&(game->player.height));
 	if (!game->player.img.img)
-	perror("ERROR OF FILE");
+		perror("ERROR OF FILE");
 	game->player.hitbox.back_x = x - 1;
 	game->player.hitbox.front_x = x + 1;
 	game->player.hitbox.top_y = y - 1;

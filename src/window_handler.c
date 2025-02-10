@@ -31,16 +31,6 @@ int	close_window(t_game *game)
 	free(game->mlx);
 	free_all_ptr((void **)game->map);
 	free_all_ptr((void **)game->enemies);
-	// mlx_destroy_window(game->mlx, game->mlx_win);
-	// free_all_ptr((void **)game->map);
-	// if (game->index != 0)
-	// {
-	// 	for (int i = 0; game->enemies[i]; i++)
-	// 		free(game->enemies[i]);
-	// 	free(game->enemies);
-	// }
-	// game->map = NULL;
-	// game->enemies = NULL;
 	exit(0);
 	return (0);
 }
@@ -86,4 +76,4 @@ int	nbr_of_ghost(char **map)
 		i++;
 	}
 	return (counter);
-} 
+}

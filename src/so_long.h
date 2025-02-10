@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/09 15:36:04 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:12:19 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,28 @@
 # define FALSE 0
 
 // Directions
-#define UP 1
-#define DOWN 2
-#define LEFT 3
-#define RIGHT 4
+# define UP 1
+# define DOWN 2
+# define LEFT 3
+# define RIGHT 4
 
 // Key codes
-#define ESC 65307
-#define W_KEY 119
-#define S_KEY 115
-#define A_KEY 97
-#define D_KEY 100
-#define UP_ARROW 65362
-#define DOWN_ARROW 65364
-#define LEFT_ARROW 65361
-#define RIGHT_ARROW 65363
+# define ESC 65307
+# define W_KEY 119
+# define S_KEY 115
+# define A_KEY 97
+# define D_KEY 100
+# define UP_ARROW 65362
+# define DOWN_ARROW 65364
+# define LEFT_ARROW 65361
+# define RIGHT_ARROW 65363
+
+typedef struct s_backtrack
+{
+	int			**visited;
+	char		**map;
+	t_items		*list;
+}			t_backtrack;
 
 typedef struct s_texture
 {
@@ -117,19 +124,41 @@ void		place_texture(t_game *game, int y, int x, char *path);
 void		init_map(t_game *game);
 int			calcul_dim(char **map);
 
+/* utils.c */
+int			ft_error(const char *str);
+int			x_pos(char target, char **map);
+int			y_pos(char target, char **map);
+int			custom_rand(void);
+int			get_random_direction(void);
+
+/* movements_handler_utils.c */
+void		movement_select(t_game *game, int direction);
 /* movements_handler.c */
 int			key_hook(int keycode, t_game *game);
-
+/* init.c */
+int			initialize_mlx(t_game *game);
+/* enemies_handler_utils.c */
+void		sprites_ghost(t_game *game, t_enemie *enemy, int direction);
+int			check_collision(t_game *game, int i);
 /* enemies_handler.c */
+static void	handle_direction(t_game *game, char **map, int i, int move);
 int			update_enemies(t_game *game);
+/* backtracking.c */
+int			**alloc_array_two_dim(char **map, t_game *game);
+int			back_track(int y, int x, t_backtrack *bt);
+int			is_map_feasible(char **map, int start_x, int start_y, t_game *game);
+/* backtracking_utils.c */
+int			is_valide_move(int y, int x, char **map, int **visited);
+int			numbers_items(char **map);
+int			not_visited(t_items *list, int y, int x);
+int			rules_back_track(int y, int x, char **map, t_items **list);
+int			try_move(int y, int x, t_backtrack *bt);
 
 /* parsing.c */
 int			is_valid(char **map, t_game *game);
 
-/* utils.c */
+/* filler.c */
 void		my_mlx_pixel_put(t_texture *data, int x, int y, int color);
 t_texture	fill_square(void *mlx, int width, int height, int color);
-int		ft_error(const char *str);
-
 
 #endif
