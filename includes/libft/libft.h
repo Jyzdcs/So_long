@@ -33,7 +33,6 @@ typedef struct s_items
 	struct s_items	*next;
 }				t_items;
 
-
 typedef int		t_bool;
 # define TRUE 1
 # define FALSE 0
@@ -41,7 +40,6 @@ typedef int		t_bool;
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 500
 # endif
-
 
 char	**free_all_ptr(void **tab);
 int		ft_strcmp(char *s1, char *s2);
