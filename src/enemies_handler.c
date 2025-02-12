@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:30:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/12 12:00:15 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:27:14 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ static void	handle_move(t_game *game, char **map, int i, int move)
 		game->enemies[i]->move = UP;
 	}
 	else if ((move == LEFT
-		&& map[game->enemies[i]->y][game->enemies[i]->x - 1] != '1')
-		|| (move == DOWN
-		&& map[game->enemies[i]->y + 1][game->enemies[i]->x] != '1')
-		)
+			&& map[game->enemies[i]->y][game->enemies[i]->x - 1] != '1')
+			|| (move == DOWN
+			&& map[game->enemies[i]->y + 1][game->enemies[i]->x] != '1')
+			)
 		handle_move2(game, map, i, move);
 	else
 		game->enemies[i]->direction = 1;

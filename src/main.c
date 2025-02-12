@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/12 11:43:55 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:26:42 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,5 @@ int	main(int ac, char **av)
 	}
 	initialize_mlx(&game);
 	setup_hooks(&game);
-	// free_all_ptr((void **)game.map);
-	// free_all_ptr((void **)game.enemies);
 	return (0);
 }

@@ -27,6 +27,8 @@ void	movement_select(t_game *game, int direction)
 		texture_path = "../textures/pac_semi_left.xpm";
 	player.img = mlx_xpm_file_to_image(game->mlx, texture_path,
 			&(game->player.height), &(game->player.width));
+	if (!player.img)
+		return ((void)close_window(game));
 	mlx_put_image_to_window(game->mlx, game->mlx_win, player.img,
 		game->player.x * 32, game->player.y * 32);
 	mlx_destroy_image(game->mlx, player.img);

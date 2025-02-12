@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:50:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/12 11:48:09 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:21:56 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static void	update_hitbox(t_game *game, int direction)
 
 static int	move_player(t_game *game, int direction)
 {
+	static int	move_counter = 0;
+
 	if (direction == UP
 		&& game->map[game->player.hitbox.top_y][game->player.x] != '1')
 		update_player_position(game, game->player.x, game->player.y - 1);
@@ -82,6 +84,10 @@ static int	move_player(t_game *game, int direction)
 	handle_collectible_and_exit(game);
 	update_hitbox(game, direction);
 	movement_select(game, direction);
+	move_counter++;
+	ft_putstr_fd("Total movements: ", 1);
+	ft_putnbr_fd(move_counter, 1);
+	ft_putchar_fd('\n', 1);
 	return (1);
 }
 
