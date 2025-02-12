@@ -21,7 +21,10 @@ void	place_texture(t_game *game, int y, int x, char *path)
 	if (!texture.img)
 	{
 		ft_error("ERROR: Image in place texture not found");
-		return (close_window(game));
+		{
+			close_window(game);
+			return ;
+		}
 	}
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		texture.img, x * 32, y * 32);

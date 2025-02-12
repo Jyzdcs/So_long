@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:50:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/10 19:12:13 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:48:09 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ int	key_hook(int keycode, t_game *game)
 	int	moved;
 
 	moved = 0;
-	printf("%d\n", keycode);
 	if (keycode == ESC)
 		close_window(game);
 	else if (keycode == W_KEY || keycode == UP_ARROW)

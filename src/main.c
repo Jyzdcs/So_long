@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/10 20:00:54 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:43:55 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int	read_map_height(char *file_path)
 		return (-1);
 	map_height = 0;
 	line = get_next_line(fd);
+	if (!line)
+		return (-1);
 	while (line != NULL)
 	{
 		map_height++;
@@ -82,6 +84,7 @@ int	basic_parse(int ac, char **av, t_game *game)
 		return (ft_error("ERROR: Memory allocation failed"));
 	if (!load_map_content(game, av[1], map_height))
 		return (ft_error("ERROR: Reading file failed"));
+	return (TRUE);
 }
 
 int	main(int ac, char **av)
@@ -105,7 +108,7 @@ int	main(int ac, char **av)
 	}
 	initialize_mlx(&game);
 	setup_hooks(&game);
-	free_all_ptr((void **)game.map);
-	free_all_ptr((void **)game.enemies);
+	// free_all_ptr((void **)game.map);
+	// free_all_ptr((void **)game.enemies);
 	return (0);
 }
