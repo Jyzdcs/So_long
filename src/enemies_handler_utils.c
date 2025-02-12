@@ -29,6 +29,11 @@ void	sprites_ghost(t_game *game, t_enemie *enemy, int direction)
 	else if (direction == LEFT)
 		enemy->img = mlx_xpm_file_to_image(game->mlx,
 				"../textures/R/ghost_left2.xpm", &size, &size);
+	if (!enemy->img)
+	{
+		ft_error("ERROR: Texture not found");
+		close_window(game);
+	}
 }
 
 int	check_collision(t_game *game, int i)

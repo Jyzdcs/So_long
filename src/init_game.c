@@ -54,7 +54,7 @@ void	init_ennemie(t_game *game, int y, int x)
 	game->enemies[game->index] = ghost;
 	game->enemies[game->index]->img = mlx_xpm_file_to_image(game->mlx,
 			"../textures/R/ghost_left2.xpm", &size, &size);
-	if (!game->enemies)
+	if (!game->enemies[game->index]->img)
 	{
 		ft_error("ERROR: Texture of enemies didnt find");
 		close_window(game);
