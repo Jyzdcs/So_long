@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 16:58:20 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 17:03:23 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,12 @@ typedef struct s_backtrack
 	t_items		*list;
 	int			total_items;
 }				t_backtrack;
+
+typedef struct s_count
+{
+	int			collectibles;
+	int			exit;
+}				t_count;
 
 typedef struct s_texture
 {
@@ -146,17 +152,11 @@ static void		handle_direction(t_game *game, char **map, int i, int move);
 int				update_enemies(t_game *game);
 /* backtracking.c */
 char			**alloc_visited_matrix(char **map, t_game *game);
-int				back_track(int y, int x, t_backtrack *bt);
+void			flood_fill(char **map, char **visited, int y, int x,
+					t_count *count);
+int				count_map_items(char **map);
 int				is_map_feasible(char **map, int start_x, int start_y,
 					t_game *game);
-/* backtracking_utils.c */
-int				is_valide_move(int y, int x, char **map, char **visited);
-int				numbers_items(char **map);
-int				not_visited(t_items *list, int y, int x);
-int				rules_back_track(int y, int x, char **map, t_items **list,
-					int total_items);
-int				try_move(int y, int x, t_backtrack *bt);
-
 /* parsing.c */
 int				is_valid(char **map, t_game *game);
 
