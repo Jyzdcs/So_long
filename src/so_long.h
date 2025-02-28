@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 12:28:23 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 13:10:34 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int				back_track(int y, int x, t_backtrack *bt);
 int				is_map_feasible(char **map, int start_x, int start_y,
 					t_game *game);
 /* backtracking_utils.c */
-int				is_valide_move(int y, int x, char **map, int **visited);
+int				is_valide_move(int y, int x, char **map, char **visited);
 int				numbers_items(char **map);
 int				not_visited(t_items *list, int y, int x);
 int				rules_back_track(int y, int x, char **map, t_items **list);
