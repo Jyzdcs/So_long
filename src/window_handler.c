@@ -15,7 +15,6 @@
 
 #include "so_long.h"
 
-
 int	close_window(t_game *game)
 {
 	if (game->mlx && game->mlx_win)
@@ -35,8 +34,8 @@ int	close_window(t_game *game)
 
 int	get_extension(char *file_path)
 {
-	size_t len;
-	char *dot;
+	size_t	len;
+	char	*dot;
 
 	if (!file_path)
 		return (1);
@@ -53,9 +52,9 @@ int	get_extension(char *file_path)
 
 int	nbr_of_ghost(char **map)
 {
-	int i;
-	int j;
-	int counter;
+	int	i;
+	int	j;
+	int	counter;
 
 	i = 0;
 	counter = 0;
