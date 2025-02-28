@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:50:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/12 12:21:56 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 15:15:19 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 static void	update_player_position(t_game *game, int new_x, int new_y)
 {
+	int			i;
 	t_texture	eraser;
 
+	i = 0;
+	while (game->enemies[i])
+	{
+		if (check_collision(game, i++))
+			close_window(game);
+	}
 	eraser = fill_square(game->mlx, 32, 32, 0x00000000);
 	game->player.old_x = game->player.x;
 	game->player.old_y = game->player.y;

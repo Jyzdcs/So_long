@@ -16,7 +16,10 @@ int	initialize_mlx(t_game *game)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
+	{
+		ft_error("Error: Mlx initialization failed");
 		return (close_window(game));
+	}
 	init_map_dimensions(game);
 	init_map(game);
 	return (1);
