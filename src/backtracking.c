@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:20:59 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 16:16:24 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 16:58:16 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	back_track(int y, int x, t_backtrack *bt)
 	int	i;
 
 	bt->visited[y][x] = TRUE;
-	if (rules_back_track(y, x, bt->map, &bt->list))
+	if (rules_back_track(y, x, bt->map, &bt->list, bt->total_items))
 		return (TRUE);
 	directions[0][0] = y;
 	directions[0][1] = x + 1;
@@ -62,6 +62,7 @@ int	is_map_feasible(char **map, int start_x, int start_y, t_game *game)
 	int			res;
 	t_items		*items;
 	t_backtrack	bt;
+	int			total_items;
 
 	bt.visited = alloc_visited_matrix(map, game);
 	if (!bt.visited)
@@ -75,6 +76,8 @@ int	is_map_feasible(char **map, int start_x, int start_y, t_game *game)
 	items->counter = 0;
 	bt.map = map;
 	bt.list = items;
+	total_items = numbers_items(map);
+	bt.total_items = total_items;
 	res = back_track(start_y, start_x, &bt);
 	ft_lstclear(&items, free);
 	free_all_ptr((void **)bt.visited);

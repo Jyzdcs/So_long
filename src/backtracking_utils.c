@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:19:50 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 16:24:20 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 16:58:18 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,28 @@ int	numbers_items(char **map)
 
 int	not_visited(t_items *list, int y, int x)
 {
-	while (list)
+	t_items	*current;
+
+	current = list;
+	while (current)
 	{
-		if (list->y == y && list->x == x)
+		if (current->y == y && current->x == x)
 			return (FALSE);
-		list = list->next;
+		current = current->next;
 	}
 	return (TRUE);
 }
 
-int	rules_back_track(int y, int x, char **map, t_items **list)
+int	rules_back_track(int y, int x, char **map, t_items **list, int total_items)
 {
 	char	current;
 
 	current = map[y][x];
-	if ((current == 'E' || current == 'C') && not_visited((*list)->next, y, x))
+	if ((current == 'E' || current == 'C') && not_visited(*list, y, x))
 	{
 		ft_lstadd_back(list, ft_lstnew(y, x));
 		(*list)->counter++;
-		if ((*list)->counter == numbers_items(map))
+		if ((*list)->counter == total_items)
 			return (TRUE);
 	}
 	return (FALSE);
