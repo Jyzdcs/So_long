@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/12 12:26:42 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:56:26 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	basic_parse(int ac, char **av, t_game *game)
 
 	if (ac != 2)
 		return (ft_error("Error: wrong number of arguments"));
+	if (!get_extension(av[1]))
+		return (ft_error("Error type of file"));
 	map_height = read_map_height(av[1]);
 	if (map_height < 0)
 		return (ft_error("ERROR: Cannot open file"));
