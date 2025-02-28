@@ -46,9 +46,9 @@ int	get_extension(char *file_path)
 	dot = ft_strrchr(file_path, '.');
 	if (!dot || dot == file_path)
 		return (1);
-	if (ft_strcmp(dot, ".ber") != 0)
-		return (1);
-	return (0);
+	if (ft_strcmp(dot, ".ber") == 0)
+		return (TRUE);
+	return (FALSE);
 }
 
 int	nbr_of_ghost(char **map)
