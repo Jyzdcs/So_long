@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:30:22 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/12 12:35:00 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 13:09:21 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	clear_enemy(t_game *game, int i, int x, int y)
 	mlx_put_image_to_window(game->mlx, game->mlx_win,
 		eraser.img, x * 32, y * 32);
 	if (!eraser.img)
-		close(game);
+		close_window(game);
 	mlx_destroy_image(game->mlx, eraser.img);
 	if (game->map[game->enemies[i]->y][game->enemies[i]->x] == 'C')
 		place_texture(game, game->enemies[i]->y,
