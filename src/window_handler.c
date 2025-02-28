@@ -2,15 +2,19 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   window_handler.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2025/02/08 22:43:56 by kclaudan          #+#    #+#             */
 /*   Updated: 2025/02/08 22:43:56 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
 
 int	close_window(t_game *game)
 {
@@ -29,32 +33,29 @@ int	close_window(t_game *game)
 	return (0);
 }
 
-int	get_extension(char *str)
+int	get_extension(char *file_path)
 {
-	int		i;
-	char	**path;
-	char	**file_name;
+	size_t len;
+	char *dot;
 
-	i = 0;
-	path = ft_split(str, '/');
-	if (!path)
+	if (!file_path)
 		return (1);
-	while (path[i + 1])
-		i++;
-	file_name = ft_split(path[i], '.');
-	if (!file_name)
+	len = ft_strlen(file_path);
+	if (len < 5)
 		return (1);
-	i = 0;
-	while (file_name[i + 1])
-		i++;
+	dot = ft_strrchr(file_path, '.');
+	if (!dot || dot == file_path)
+		return (1);
+	if (ft_strcmp(dot, ".ber") != 0)
+		return (1);
 	return (0);
 }
 
 int	nbr_of_ghost(char **map)
 {
-	int	i;
-	int	j;
-	int	counter;
+	int i;
+	int j;
+	int counter;
 
 	i = 0;
 	counter = 0;
