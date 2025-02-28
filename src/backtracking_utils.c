@@ -6,13 +6,13 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:19:50 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/10 16:19:50 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:28:36 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	is_valide_move(int y, int x, char **map, int **visited)
+int	is_valide_move(int y, int x, char **map, char **visited)
 {
 	if (map[y][x] != '1' && !visited[y][x])
 		return (TRUE);
@@ -21,24 +21,24 @@ int	is_valide_move(int y, int x, char **map, int **visited)
 
 int	numbers_items(char **map)
 {
-	int	tot_items;
+	int	count;
 	int	i;
 	int	j;
 
 	i = 0;
-	tot_items = 0;
+	count = 0;
 	while (map[i])
 	{
 		j = 0;
 		while (map[i][j])
 		{
 			if (map[i][j] == 'C' || map[i][j] == 'E')
-				tot_items++;
+				count++;
 			j++;
 		}
 		i++;
 	}
-	return (tot_items);
+	return (count);
 }
 
 int	not_visited(t_items *list, int y, int x)
@@ -54,14 +54,16 @@ int	not_visited(t_items *list, int y, int x)
 
 int	rules_back_track(int y, int x, char **map, t_items **list)
 {
-	if ((map[y][x] == 'E' || map[y][x] == 'C')
-		&& not_visited((*list)->next, y, x))
+	char	current;
+
+	current = map[y][x];
+	if ((current == 'E' || current == 'C') && not_visited((*list)->next, y, x))
 	{
 		ft_lstadd_back(list, ft_lstnew(y, x));
 		(*list)->counter++;
+		if ((*list)->counter == numbers_items(map))
+			return (TRUE);
 	}
-	if ((*list)->counter == numbers_items(map))
-		return (TRUE);
 	return (FALSE);
 }
 

@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:20:59 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/10 16:20:59 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:29:38 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,47 @@
 
 int	back_track(int y, int x, t_backtrack *bt)
 {
+	int	directions[4][2];
+	int	i;
+
 	bt->visited[y][x] = TRUE;
 	if (rules_back_track(y, x, bt->map, &bt->list))
 		return (TRUE);
-	if (try_move(y, x + 1, bt)
-		|| try_move(y, x - 1, bt)
-		|| try_move(y + 1, x, bt)
-		|| try_move(y - 1, x, bt))
-		return (TRUE);
+	directions[0][0] = y;
+	directions[0][1] = x + 1;
+	directions[1][0] = y;
+	directions[1][1] = x - 1;
+	directions[2][0] = y + 1;
+	directions[2][1] = x;
+	directions[3][0] = y - 1;
+	directions[3][1] = x;
+	i = 0;
+	while (i < 4)
+	{
+		if (try_move(directions[i][0], directions[i][1], bt))
+			return (TRUE);
+		i++;
+	}
 	bt->visited[y][x] = FALSE;
 	return (FALSE);
 }
 
-int	**alloc_array_two_dim(char **map, t_game *game)
+char	**alloc_visited_matrix(char **map, t_game *game)
 {
-	int	**arr;
-	int	i;
+	char	**visited;
+	int		i;
 
-	arr = ft_calloc((game->map_height + 1), sizeof(int *));
-	if (!arr)
+	visited = ft_calloc((game->map_height + 1), sizeof(char *));
+	if (!visited)
 		return (NULL);
 	i = 0;
 	while (map[i])
 	{
-		arr[i] = ft_calloc(game->map_width, sizeof(int));
-		if (!arr[i++])
-			return ((int **)free_all_ptr((void **)arr));
+		visited[i] = ft_calloc(game->map_width, sizeof(char));
+		if (!visited[i++])
+			return ((char **)free_all_ptr((void **)visited));
 	}
-	return (arr);
+	return (visited);
 }
 
 int	is_map_feasible(char **map, int start_x, int start_y, t_game *game)
@@ -50,7 +63,7 @@ int	is_map_feasible(char **map, int start_x, int start_y, t_game *game)
 	t_items		*items;
 	t_backtrack	bt;
 
-	bt.visited = alloc_array_two_dim(map, game);
+	bt.visited = alloc_visited_matrix(map, game);
 	if (!bt.visited)
 		return (FALSE);
 	items = ft_lstnew(start_y, start_x);
