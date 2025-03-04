@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:20:59 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 17:03:28 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:01:41 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ char	**alloc_visited_matrix(char **map, t_game *game)
 	return (visited);
 }
 
-void	flood_fill(char **map, char **visited, int y, int x, t_count *count)
+void	flood_fill(t_arr arr, int y, int x, t_count *count)
 {
 	int	directions[4][2];
 	int	i;
 
-	if (visited[y][x])
+	if (arr.visited[y][x])
 		return ;
-	visited[y][x] = 1;
-	if (map[y][x] == 'C')
+	arr.visited[y][x] = 1;
+	if (arr.map[y][x] == 'C')
 		count->collectibles++;
-	if (map[y][x] == 'E')
+	if (arr.map[y][x] == 'E')
 		count->exit = 1;
 	directions[0][0] = y;
 	directions[0][1] = x + 1;
@@ -50,13 +50,12 @@ void	flood_fill(char **map, char **visited, int y, int x, t_count *count)
 	directions[2][1] = x;
 	directions[3][0] = y - 1;
 	directions[3][1] = x;
-	i = 0;
-	while (i < 4)
+	i = -1;
+	while (++i < 4)
 	{
-		if (map[directions[i][0]][directions[i][1]] != '1'
-			&& !visited[directions[i][0]][directions[i][1]])
-			flood_fill(map, visited, directions[i][0], directions[i][1], count);
-		i++;
+		if (arr.map[directions[i][0]][directions[i][1]] != '1'
+			&& !arr.visited[directions[i][0]][directions[i][1]])
+			flood_fill(arr, directions[i][0], directions[i][1], count);
 	}
 }
 
@@ -84,19 +83,20 @@ int	count_map_items(char **map)
 
 int	is_map_feasible(char **map, int start_x, int start_y, t_game *game)
 {
-	char	**visited;
 	t_count	count;
 	int		total_collectibles;
 	int		result;
+	t_arr	arr;
 
-	visited = alloc_visited_matrix(map, game);
-	if (!visited)
+	arr.visited = alloc_visited_matrix(map, game);
+	if (!arr.visited)
 		return (FALSE);
+	arr.map = map;
 	count.collectibles = 0;
 	count.exit = 0;
 	total_collectibles = count_map_items(map);
-	flood_fill(map, visited, start_y, start_x, &count);
+	flood_fill(arr, start_y, start_x, &count);
 	result = (count.collectibles == total_collectibles && count.exit);
-	free_all_ptr((void **)visited);
+	free_all_ptr((void **)arr.visited);
 	return (result);
 }

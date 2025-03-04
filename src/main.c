@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 15:24:10 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:31:32 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static int	load_map_content(t_game *game, char *file_path, int map_height)
 	while (i < map_height)
 	{
 		game->map[i] = get_next_line(fd);
+		if (ft_strlen(game->map[i]) < 2)
+			printf("ERROR ERROR ERROR\n");
 		if (!game->map[i])
 		{
 			while (i > 0)

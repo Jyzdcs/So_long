@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:29:25 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 17:03:23 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:59:50 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,12 @@ typedef struct s_backtrack
 	t_items		*list;
 	int			total_items;
 }				t_backtrack;
+
+typedef struct s_arr
+{
+	char	**map;
+	char	**visited;
+}				t_arr;
 
 typedef struct s_count
 {
@@ -152,8 +158,7 @@ static void		handle_direction(t_game *game, char **map, int i, int move);
 int				update_enemies(t_game *game);
 /* backtracking.c */
 char			**alloc_visited_matrix(char **map, t_game *game);
-void			flood_fill(char **map, char **visited, int y, int x,
-					t_count *count);
+void			flood_fill(t_arr arr, int y, int x, t_count *count);
 int				count_map_items(char **map);
 int				is_map_feasible(char **map, int start_x, int start_y,
 					t_game *game);
