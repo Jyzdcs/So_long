@@ -38,7 +38,7 @@ typedef int		t_bool;
 # define FALSE 0
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 500
+#  define BUFFER_SIZE 1
 # endif
 
 char	**free_all_ptr(void **tab);

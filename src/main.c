@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 17:44:01 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/03/04 17:44:04 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:12:31 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,11 @@ static int	read_map_height(char *file_path)
 	return (map_height);
 }
 
-static void	cleanup_map_memory(char **map, int limit, int fd)
-{
-	int	i;
-
-	i = 0;
-	while (i < limit)
-	{
-		if (map[i])
-			free(map[i]);
-		i++;
-	}
-	free(map);
-	close(fd);
-}
-
 static int	load_map_content(t_game *game, char *file_path, int map_height)
 {
-	int	fd;
-	int	i;
+	int		fd;
+	int		i;
 
-	game->map = ft_calloc(map_height + 1, sizeof(char *));
-	if (!game->map)
-		return (0);
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
 		return (0);
@@ -65,10 +47,13 @@ static int	load_map_content(t_game *game, char *file_path, int map_height)
 	while (i < map_height)
 	{
 		game->map[i] = get_next_line(fd);
-		if (!game->map[i] || ft_strlen(game->map[i]) < 2)
+		if (!game->map[i])
 		{
-			cleanup_map_memory(game->map, i + 1, fd);
-			return (ft_error("Error: Invalid map format detected"));
+			while (i > 0)
+				free(game->map[--i]);
+			free(game->map);
+			close(fd);
+			return (0);
 		}
 		i++;
 	}
@@ -87,7 +72,7 @@ static void	setup_hooks(t_game *game)
 
 int	basic_parse(int ac, char **av, t_game *game)
 {
-	int	map_height;
+	int		map_height;
 
 	if (ac != 2)
 		return (ft_error("Error: wrong number of arguments"));

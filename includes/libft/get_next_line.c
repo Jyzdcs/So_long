@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:24:59 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/10 20:17:25 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:10:37 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_next(char *buffer)
 	char	*line;
 
 	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
+	while (buffer[i])
 		i++;
 	if (!buffer[i])
 	{
