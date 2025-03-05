@@ -6,7 +6,7 @@
 /*   By: kclaudan <kclaudan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:01:44 by kclaudan          #+#    #+#             */
-/*   Updated: 2025/02/28 15:24:31 by kclaudan         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:21:14 by kclaudan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ static int	check_special_chars(char **map, int *exit, int *item, int *player)
 		while (map[i][j])
 		{
 			if (map[i][j] == 'E')
-				*exit = 1;
+				*exit += 1;
 			if (map[i][j] == 'C')
 				*item = 1;
 			if (map[i][j] == 'P')
-				*player = 1;
+				*player += 1;
 			if (!is_valid_char(map[i][j]))
 				return (FALSE);
 			j++;
@@ -105,7 +105,7 @@ int	is_valid(char **map, t_game *game)
 	if (!check_special_chars(map, &exit, &item, &player))
 		return (FALSE);
 	if (!is_rect(map) || check_borders(map, game->map_height, game->map_width)
-		|| !exit || !item || !player
+		|| !exit || !item || !player || player > 1 || exit > 1
 		|| !is_map_feasible(map, x_pos('P', map), y_pos('P', map), game))
 		return (FALSE);
 	return (TRUE);
